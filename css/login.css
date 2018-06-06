@@ -1,0 +1,81 @@
+/*
+ * Body
+ */
+
+body {
+	height: 100%;
+	resize: both;
+	background: url("../files/cover/bg_logo_01.png")no-repeat center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: normal;
+}
+
+/*
+ * Topbar Navigation
+ */
+
+.navbar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 20;
+	background-color: #b7d7f0;
+	border: 0;
+}
+
+#hd-btn-login {
+	margin-top: 25px;
+}
+
+.register-account {
+	margin-top: 5px;
+}
+
+/*
+ * Open Modal
+ */
+
+#modal-header {
+    background-color: #b7d7f0;
+}
+
+#modal-header > h3 {
+	font-family: Amaranth;
+    font-weight: bold;
+    text-align: center;
+}
+
+#modal-body {
+    background-color: #ffffff;
+}
+
+#add_top_padding {
+    padding-top: 6px;
+}
+
+body,
+header,
+form {
+	color: #000000;
+}
+
+
+/*
+ * Footer
+ */
+
+footer {
+  position: fixed;
+  width: 100%;
+  height: auto;
+  background-color: #b7d7f0;
+  bottom: 0;
+  padding: 10px;
+  color: #000000;
+
+}

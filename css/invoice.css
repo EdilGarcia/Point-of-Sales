@@ -1,0 +1,26 @@
+.center {
+  margin: auto;
+  float: none;
+  width: 50%;
+  text-align: center
+}
+
+.padding-top-1{
+  padding-top: 75px;
+}
+.padding-top-2{
+  padding-top: 40px;
+}
+
+.table > tbody > tr > .highrow {
+    border-top: 3px solid;
+}
+
+.table > tbody > tr > .emptyrow {
+    border-top: none;
+}
+
+.table > tbody > tr > .medrow {
+    background-color: #F5F5F5;
+    border: none;
+}
