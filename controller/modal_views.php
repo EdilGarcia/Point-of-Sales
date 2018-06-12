@@ -443,7 +443,7 @@ function view_update_invoice_patient()
         <p>".$patient_id."</p>
       </div>
     </div>
-    <input type='hidden' name='transac_add' id='invoice_add' value='0'/>
+    <input type='hidden' name='transac_update' id='invoice_add' value='0'/>
     <input type='hidden' name='path' id='path' value='".$_POST['path']."'/>
     <input type='hidden' name='patient_id_fk' id='patient_id_fk' value='".$patient_id."'/>";
   $output .= '

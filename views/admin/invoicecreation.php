@@ -108,11 +108,35 @@
                                   <td><button type="button" class="btn btn-sm btn-primary view_btn">View</button></td>
                                   <?php
                                     if($row['invoice_type'] == 'invoice')
-                                      echo ('<td><button type="button" class="btn btn-sm btn-primary create_recipt_btn">Check out</button></td>
-                                            <td><button type="button" class="btn btn-sm btn-danger delete_btn">Delete</button></td>');
+                                      echo ('<td>
+                                              <form method="POST" action="./../../controller/transactions.php">
+                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
+                                                <input type="submit" class="btn btn-sm btn-primary" name="invoice_param" value="Check out"/>
+                                              </form>
+                                            </td>
+                                            <td>
+                                              <form method="POST" action="./../../controller/transactions.php">
+                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
+                                                <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
+                                              </form>
+                                            </td>');
                                     else if($row['invoice_type'] == 'quotation')
-                                      echo ('<td><button type="button" class="btn btn-sm btn-primary create_invoice_btn">Create Invoice</button></td>
-                                            <td><button type="button" class="btn btn-sm btn-danger delete_btn">Delete</button></td>');
+                                      echo ('<td>
+                                              <form method="POST" action="./../../controller/transactions.php">
+                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
+                                                <input type="submit" class="btn btn-sm btn-primary" name="quotation_param" value="Create Invoice"/>
+                                              </form>
+                                            </td>
+                                            <td>
+                                              <form method="POST" action="./../../controller/transactions.php">
+                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
+                                                <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
+                                              </form>
+                                            </td>');
                                   ?>
                                 </tr>
                               <tbody>
@@ -260,10 +284,12 @@
           </div>
 
           <form class='form-horizontal' role='form' method='POST' action='./../../controller/transactions.php'>
+            <input type="hidden" name="invoice_id" id="invoice_id" value="">
             <div class="modal-body" id="modal_table_data">
             </div>
 
             <div class="modal-footer">
+              <input type="submit" class="btn btn-default" name="btn_edit_transaction" value="Save Changes"/>
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
           </form>
@@ -425,6 +451,10 @@
         });
       });
 
+      $(document).on("click", ".create_recipt_btn", function() {
+
+      });
+
       $(document).on("click", ".edit_btn", function() {
         var invoice_id = $(this).closest('.clickable-row').find('.invoice_id').html();
         var patient_id = $(this).closest('tr').attr('id');
@@ -433,6 +463,7 @@
         var printable = 0;
         var user_id = "<?php echo($_SESSION['user_id']);?>";
         var path = "./../views/admin/invoicecreation.php";
+        $('#invoice_id').val(invoice_id);
         if(class_type == "invoice")
           printable = 0;
         else

@@ -39,7 +39,8 @@
             <li class="active">
               <a href="#"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
               <ul class="nav" id="mn-sub-menu">
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-money" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
               </ul>
             </li>
             <li>

@@ -27,6 +27,8 @@
       update_procedure();
     else if(isset($_POST['item_update']))
       update_item();
+    else if(isset($_POST['transac_update']))
+      update_transaction();
 
     //transactions
     else if(isset($_POST['quotation_param']))
@@ -399,6 +401,82 @@
     }
 
     //update functions
+    function update_transaction() {
+        require('db_connect.php');
+        $invoice_id = $_POST['invoice_id'];
+        $path = $_POST['path'];
+        $procedures = $_POST['procedures'];
+        $procedure_id_fk = array();
+        $doctors = $_POST['doctors'];
+        $doctor_id_fk = array();
+        $invoice_cost = 0;
+
+        for($x=0;$x<count($procedures);$x++)
+        {
+          $split = explode("//",$procedures[$x]);
+          array_push($procedure_id_fk,$split[0]);
+          $invoice_cost += intval($split[1]);
+        }
+
+        for($x=0;$x<count($doctors);$x++)
+        {
+          $split = explode("//",$doctors[$x]);
+          array_push($doctor_id_fk,$split[0]);
+          $invoice_cost += intval($split[1]);
+        }
+
+        $preparedStmt = "UPDATE `tbl_invoice` SET `invoice_cost`=:invoice_cost WHERE invoice_id=:invoice_id";
+        $stmt = $connection->prepare($preparedStmt);
+        $stmt->bindParam(':invoice_id', $invoice_id);
+        $stmt->bindParam(':invoice_cost', $invoice_cost);
+        $stmt->execute();
+
+        $preparedStmt = "DELETE FROM `tbl_invoice_doctor` WHERE invoice_id_fk=:invoice_id_fk";
+        $stmt = $connection->prepare($preparedStmt);
+        $stmt->bindParam(':invoice_id_fk', $invoice_id);
+        $stmt->execute();
+
+        $insertQuery = array();
+        $insertData = array();
+        $preparedStatement = "INSERT INTO `tbl_invoice_doctor`(`doctor_id_fk`, `invoice_id_fk`) VALUES ";
+        for($x=0;$x<count($doctor_id_fk);$x++)
+        {
+          $insertQuery[] = '(:doctor_id_fk'.$x.', :invoice_id_fk)';
+          $insertData[':doctor_id_fk'.$x] = $doctor_id_fk[$x];
+          $insertData[':invoice_id_fk'] = $invoice_id;
+        }
+
+        if(!empty($insertQuery))
+        {
+          $preparedStatement .= implode(',', $insertQuery);
+          $stmt = $connection->prepare($preparedStatement);
+          $stmt->execute($insertData);
+        }
+
+        $preparedStmt = "DELETE FROM `tbl_invoice_procedure` WHERE invoice_id_fk=:invoice_id_fk";
+        $stmt = $connection->prepare($preparedStmt);
+        $stmt->bindParam(':invoice_id_fk', $invoice_id);
+        $stmt->execute();
+
+        $insertQuery = array();
+        $insertData = array();
+        $preparedStatement = "INSERT INTO `tbl_invoice_procedure`(`invoice_id_fk`, `procedure_id_fk`) VALUES ";
+        for($x=0;$x<count($procedure_id_fk);$x++)
+        {
+          $insertQuery[] = '(:invoice_id_fk, :procedure_id_fk'.$x.')';
+          $insertData[':invoice_id_fk'] = $invoice_id;
+          $insertData[':procedure_id_fk'.$x] = $procedure_id_fk[$x];
+        }
+        if(!empty($insertQuery))
+        {
+          $preparedStatement .= implode(',', $insertQuery);
+          $stmt = $connection->prepare($preparedStatement);
+          $stmt->execute($insertData);
+        }
+
+        header("Location: ".$path);
+    }
+
     function update_patient() {
 
         require('db_connect.php');
