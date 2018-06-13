@@ -40,7 +40,7 @@
               <a href="#"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
               <ul class="nav" id="mn-sub-menu">
                   <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-money" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
+                  <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
               </ul>
             </li>
             <li>
@@ -66,18 +66,18 @@
                   </div>
                   <div class="row" style="padding-left:5%;">
                     <div class="col-sm-4 col-md-4">
-                        <a href="./patientsettings.php" class="btn btn-primary btn-lg" id="btn_patient_entry">Patient Entry</a>
+                        <a href="patientsearch.php" class="btn btn-primary btn-lg">Search Patient</a>
                     </div>
                     <div class="col-sm-4 col-md-4">
                         <a href="./invoicecreation.php" class="btn btn-primary btn-lg" id="btn_invoice_creation">Transaction Search</a>
                     </div>
                     <div class="col-sm-4 col-md-4">
-                        <a href="./account.php" class="btn btn-primary btn-lg" id="btn_account_settings">Account Settings</a>
+                        <a href="./patientsettings.php" class="btn btn-primary btn-lg" id="btn_patient_entry">Patient Entry</a>
                     </div>
                   </div>
                   <div class="row"  style="padding-top:10px; padding-left:5%;">
                     <div class="col-sm-4 col-md-4">
-                        <a href="patientsearch.php" class="btn btn-primary btn-lg">Search Patient</a>
+                        <a href="./account.php" class="btn btn-primary btn-lg" id="btn_account_settings">Account Settings</a>
                     </div>
                     <div class="col-sm-4 col-md-4">
                         <a href="#" class="btn btn-primary btn-lg">Masterlist</a>

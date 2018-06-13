@@ -37,7 +37,12 @@
         <div class="row">
           <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-              <li> <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
+              <li>
+                <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
+                <ul class="nav" id="mn-sub-menu">
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
+                </ul>
               </li>
               <li>
                   <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
@@ -62,7 +67,6 @@
                 </ul>
               </div>
               <div class="tab-content">
-
                 <div class="panel panel-primary filterable tab-pane active" id="mn-patient-panel">
                   <div class="panel-heading" style="height: 50px;">
                     <h3 class="panel-title">Patients</h3>

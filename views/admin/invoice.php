@@ -158,7 +158,12 @@
           <div class="col-xs-2 align-self-center">
             <p class="pull-left">
               <?php
-                if($_SESSION['class_type'] == 'receipt')
+                if(isset($_SESSION['class_type']))
+                {
+                  if($_SESSION['class_type'] == 'receipt')
+                    echo $invoice_id;
+                }
+                else
                   echo $invoice_id;
               ?>
             </p>
@@ -193,7 +198,12 @@
           <div class="col-xs-2 align-self-center">
             <p class="pull-left">
               <?php
-                if($_SESSION['class_type'] == 'receipt')
+                if(isset($_SESSION['class_type']))
+                {
+                  if($_SESSION['class_type'] == 'receipt')
+                    echo $invoice_date;
+                }
+                else
                   echo $invoice_date;
               ?>
             </p>
@@ -209,8 +219,13 @@
           <div class="col-xs-2 align-self-center">
             <p class="pull-left">
               <?php
+              if(isset($_SESSION['class_type']))
+              {
                 if($_SESSION['class_type'] == 'receipt')
                   echo $user_name;
+              }
+              else
+                echo $user_name;
               ?>
             </p>
           </div>

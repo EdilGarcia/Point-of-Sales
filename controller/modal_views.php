@@ -51,6 +51,7 @@
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $procedure_name = $row['procedure_name'];
     $procedure_cost = $row['procedure_cost'];
+    $path = $_POST['path'];
 
     $output = '
     <form class="form-horizontal" role="form" method="post" action="./../../controller/transactions.php">
@@ -63,6 +64,7 @@
               $output .= '<input type="hidden" value="0" name="delete_procedure">';
             $output .= '
             <input type="hidden" value="'.$procedure_id.'" name="procedure_id">
+            <input type="hidden" value="'.$path.'" name="path">
           </div>
         </div>
         <div class="form-group">

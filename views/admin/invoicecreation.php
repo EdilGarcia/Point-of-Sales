@@ -40,7 +40,8 @@
               <li>
                 <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
                 <ul class="nav" id="mn-sub-menu">
-                    <li style="color: #000000;background-color: #b7d7f0;"><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li style="color: #000000;background-color: #b7d7f0;"><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
                 </ul>
               </li>
               <li>
@@ -61,93 +62,156 @@
                 <div class="mn-dashboard-header">
                   <h3>Transaction Search</h3>
                   <hr>
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a href="#mn-transaction-panel" data-toggle="tab">Active Transactions</a></li>
+                    <li><a href="#mn-deleted-transaction-panel" data-toggle="tab">Inactive Transactions</a></li>
+                  </ul>
                 </div>
-
-                <div class="panel panel-primary filterable tab-pane active" id="mn-patient-panel" style="height: 60%; overflow-y:auto;">
-                  <div class="panel-heading" style="height: 50px;">
-                    <h3 class="panel-title">Transaction</h3>
-                    <div class="pull-right">
-                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
-                        <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_patient"><span class="fa fa-plus"></span> Add</button>
+                <div class="tab-content">
+                  <div class="panel panel-primary filterable tab-pane active" id="mn-transaction-panel" style="height: 60%; overflow-y:auto;">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Transaction</h3>
+                      <div class="pull-right">
+                          <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                          <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_transaction"><span class="fa fa-plus"></span> Add</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <table class="table table-hover">
-                    <thead>
-                      <tr class="filters">
-                        <th class="col-md-3"><input type="text" class="form-control" placeholder="Invoice ID" disabled></th>
-                        <th class="col-md-2"><input type="text" class="form-control" placeholder="Date" disabled></th>
-                        <th class="col-md-2"><input type="text" class="form-control" placeholder="Patient Name" disabled></th>
-                        <th class="col-md-3"><input type="text" class="form-control" placeholder="Transaction Type" disabled></th>
-                        <th class="col-md-2">Actions</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <?php
-                        require('./../../controller/db_connect.php');
-                        $preparedStmt = " SELECT * FROM `tbl_invoice`
-                                          LEFT JOIN `tbl_patient`
-                                          ON `tbl_invoice`.`patient_id_fk` = `tbl_patient`.`patient_id`
-                                          WHERE invoice_status = 1";
-                        $stmt = $connection->prepare($preparedStmt);
-                        $stmt->execute();
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-                        {
-                      ?>
-                      <tr class="clickable-row">
-                          <td class="col-md-3 invoice_id"><?php echo $row['invoice_id']; ?></td>
-                          <td class="col-md-2"><?php echo $row['invoice_date']; ?></td>
-                          <td class="col-md-2 patient_name"><?php echo $row['patient_name']; ?></td>
-                          <td class="col-md-3 invoice_type"><?php echo $row['invoice_type']; ?></td>
-                          <td class="col-md-2">
-                            <table>
-                              <tbody>
-                                <tr id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>">
-                                  <td><button type="button" class="btn btn-sm btn-primary edit_btn">Edit</button></td>
-                                  <td><button type="button" class="btn btn-sm btn-primary view_btn">View</button></td>
-                                  <?php
-                                    if($row['invoice_type'] == 'invoice')
-                                      echo ('<td>
-                                              <form method="POST" action="./../../controller/transactions.php">
-                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
-                                                <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
-                                                <input type="submit" class="btn btn-sm btn-primary" name="invoice_param" value="Check out"/>
-                                              </form>
-                                            </td>
-                                            <td>
-                                              <form method="POST" action="./../../controller/transactions.php">
-                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
-                                                <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
-                                                <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
-                                              </form>
-                                            </td>');
-                                    else if($row['invoice_type'] == 'quotation')
-                                      echo ('<td>
-                                              <form method="POST" action="./../../controller/transactions.php">
-                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
-                                                <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
-                                                <input type="submit" class="btn btn-sm btn-primary" name="quotation_param" value="Create Invoice"/>
-                                              </form>
-                                            </td>
-                                            <td>
-                                              <form method="POST" action="./../../controller/transactions.php">
-                                                <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
-                                                <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
-                                                <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
-                                              </form>
-                                            </td>');
-                                  ?>
-                                </tr>
-                              <tbody>
-                            </table>
-                          </td>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th class="col-md-3"><input type="text" class="form-control" placeholder="Invoice ID" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Date" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Patient Name" disabled></th>
+                          <th class="col-md-3"><input type="text" class="form-control" placeholder="Transaction Type" disabled></th>
+                          <th class="col-md-2">Actions</th>
                         </tr>
+                      </thead>
+
+                      <tbody>
                         <?php
-                        }
+                          require('./../../controller/db_connect.php');
+                          $preparedStmt = " SELECT * FROM `tbl_invoice`
+                                            LEFT JOIN `tbl_patient`
+                                            ON `tbl_invoice`.`patient_id_fk` = `tbl_patient`.`patient_id`
+                                            WHERE invoice_status = 1";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
                         ?>
-                    </tbody>
-                  </table>
+                        <tr class="clickable-row">
+                            <td class="col-md-3 invoice_id"><?php echo $row['invoice_id']; ?></td>
+                            <td class="col-md-2"><?php echo $row['invoice_date']; ?></td>
+                            <td class="col-md-2 patient_name"><?php echo $row['patient_name']; ?></td>
+                            <td class="col-md-3 invoice_type"><?php echo $row['invoice_type']; ?></td>
+                            <td class="col-md-2">
+                              <table>
+                                <tbody>
+                                  <tr id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>">
+                                    <td><button type="button" class="btn btn-sm btn-primary edit_btn">Edit</button></td>
+                                    <td><button type="button" class="btn btn-sm btn-primary view_btn">View</button></td>
+                                    <?php
+                                      if($row['invoice_type'] == 'invoice')
+                                        echo ('<td>
+                                                <form method="POST" action="./../../controller/transactions.php">
+                                                  <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                  <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
+                                                  <input type="submit" class="btn btn-sm btn-primary" name="invoice_param" value="Check out"/>
+                                                </form>
+                                              </td>
+                                              <td>
+                                                <form method="POST" action="./../../controller/transactions.php">
+                                                  <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                  <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
+                                                  <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
+                                                </form>
+                                              </td>');
+                                      else if($row['invoice_type'] == 'quotation')
+                                        echo ('<td>
+                                                <form method="POST" action="./../../controller/transactions.php">
+                                                  <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                  <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
+                                                  <input type="submit" class="btn btn-sm btn-primary" name="quotation_param" value="Create Invoice"/>
+                                                </form>
+                                              </td>
+                                              <td>
+                                                <form method="POST" action="./../../controller/transactions.php">
+                                                  <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                                  <input type="hidden" name="invoice_id" value="'.$row['invoice_id'].'"/>
+                                                  <input type="submit" class="btn btn-sm btn-danger" name="delete_invoice" value="Delete"/>
+                                                </form>
+                                              </td>');
+                                    ?>
+                                  </tr>
+                                <tbody>
+                              </table>
+                            </td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="panel panel-primary filterable tab-pane" id="mn-deleted-transaction-panel">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Deleted Transactions</h3>
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      </div>
+                    </div>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th class="col-md-3"><input type="text" class="form-control" placeholder="Invoice ID" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Date" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Patient Name" disabled></th>
+                          <th class="col-md-3"><input type="text" class="form-control" placeholder="Transaction Type" disabled></th>
+                          <th class="col-md-2">Actions</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <?php
+                          require('./../../controller/db_connect.php');
+                          $preparedStmt = " SELECT * FROM `tbl_invoice`
+                                            LEFT JOIN `tbl_patient`
+                                            ON `tbl_invoice`.`patient_id_fk` = `tbl_patient`.`patient_id`
+                                            WHERE invoice_status = 2";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
+                        ?>
+                        <tr class="clickable-row">
+                            <td class="col-md-3 invoice_id"><?php echo $row['invoice_id']; ?></td>
+                            <td class="col-md-2"><?php echo $row['invoice_date']; ?></td>
+                            <td class="col-md-2 patient_name"><?php echo $row['patient_name']; ?></td>
+                            <td class="col-md-3 invoice_type"><?php echo $row['invoice_type']; ?></td>
+                            <td class="col-md-2">
+                              <table>
+                                <tbody>
+                                  <tr id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>">
+                                    <td><button type="button" class="btn btn-sm btn-primary view_btn">View</button></td>
+                                    <td>
+                                      <form method="POST" action="./../../controller/transactions.php">
+                                        <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
+                                        <input type="hidden" name="invoice_id" value="<?php echo($row['invoice_id']);?>"/>
+                                        <input type="submit" class="btn btn-sm btn-primary" name="invoice_activate" value="Restore"/>
+                                      </form>
+                                    </td>
+                                  </tr>
+                                <tbody>
+                              </table>
+                            </td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,7 +221,7 @@
     </main>
 
         <!-- Modal -->
-    <div id="open_patient" class="modal fade" role="dialog">
+    <div id="open_transaction" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -167,77 +231,7 @@
             <h4 class="modal-title">Patient Information</h4>
           </div>
           <div class="modal-body">
-            <div class="container-fluid">
-              <form class="form-horizontal" role="form" method="post" action="./../../controller/transactions.php">
 
-                <input type="hidden" value="0" name="patient_add" id="patient_add">
-
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                      <p>Patient Name:</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                      <input type="text" class="form-control" placeholder="Last Name, First Name M.I." name="patient_name" id="patient_name" required/>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                      <p>Gender: </p>
-                    </div>
-
-                    <div class="col-md-5 col-md-offset-1">
-                      <p>Birthday: </p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-1 col-md-offset-1">
-                      <label class="radio-inline">
-                        <input type="radio" value="Male" name="patient_gender" id="patient_gender" required/>Male
-                      </label>
-                    </div>
-
-                    <div class="col-md-1 col-md-offset-1">
-                      <label class="radio-inline">
-                        <input type="radio" value="Female" name="patient_gender" id="patient_gender" required/>Female
-                      </label>
-                    </div>
-
-                    <div class="col-md-4 col-md-offset-3">
-                      <input type="date" class="form-control" name="patient_date_of_birth" id="patient_date_of_birth" required/>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                        <p>Address:</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                      <input type="text" class="form-control" placeholder="Address" name="patient_address" id="patient_address" required/>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-4 col-md-offset-7">
-                        <input type="submit" class="btn btn-default pull-right" id="patient_add_btn" name="patient_add_btn" value="Add"/>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

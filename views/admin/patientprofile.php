@@ -37,7 +37,7 @@
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
   $user_name = $row['user_name'];
   // Get doctors_id/s
-  $preparedStmt = "SELECT * FROM `tbl_doctor_invoice` WHERE invoice_id_fk=:invoice_id_fk";
+  $preparedStmt = "SELECT * FROM `tbl_invoice_doctor` WHERE invoice_id_fk=:invoice_id_fk";
   $stmt = $connection->prepare($preparedStmt);
   $stmt->bindParam(':invoice_id_fk', $invoice_id);
   $stmt->execute();
@@ -169,7 +169,12 @@
         <div class="row">
           <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-              <li class="active"> <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
+              <li class="active">
+                <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
+                <ul class="nav" id="mn-sub-menu">
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
+                </ul>
               </li>
 
               <li>
@@ -370,6 +375,7 @@
               url: "./../../controller/modal_views.php",
               method: "post",
               data: {invoice_id: invoice_id,
+                    printable: 1,
                     view_invoice: 0},
               success: function(data) {
                 $('#invoice_container').html(data);

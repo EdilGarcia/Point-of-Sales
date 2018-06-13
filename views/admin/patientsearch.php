@@ -40,7 +40,8 @@
               <li>
                 <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
                 <ul class="nav" id="mn-sub-menu">
-                    <li style="color: #000000;background-color: #b7d7f0;"><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li style="color: #000000;background-color: #b7d7f0;"><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
                 </ul>
               </li>
               <li>
