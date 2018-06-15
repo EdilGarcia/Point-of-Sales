@@ -12,6 +12,8 @@
     view_invoice_patient();
   else if(isset($_POST['view_update_invoice']))
     view_update_invoice_patient();
+  else if(isset($_POST['create_new_invoice']))
+    create_new_invoice_patient();
 
   // Patient Updates and Deletes
   else if(isset($_POST['patient_view_update']))
@@ -59,9 +61,9 @@
         <div class="form-group">
           <div class="col-md-12">';
             if($mode == 'update')
-              $output .= '<input type="hidden" value="0" name="update_procedure">';
+              $output .= '<input type="hidden" value="0" name="procedure_update">';
             else
-              $output .= '<input type="hidden" value="0" name="delete_procedure">';
+              $output .= '<input type="hidden" value="0" name="procedure_delete">';
             $output .= '
             <input type="hidden" value="'.$procedure_id.'" name="procedure_id">
             <input type="hidden" value="'.$path.'" name="path">
@@ -390,6 +392,12 @@
   $stmt = null;
   //header("Location: ../forms/uom.html");
   }
+
+function create_new_invoice_patient()
+{
+  require('db_connect.php');
+  
+}
 
 function view_update_invoice_patient()
 {

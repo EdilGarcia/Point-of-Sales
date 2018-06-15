@@ -5,9 +5,8 @@
     <title>
       Makati PET/CT Center
     </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="./../../css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="./../../css/w3.css">
     <link rel="stylesheet" type="text/css" href="./../../css/setting.css">
 
     <script src="./../../js/jquery-3.3.1.min.js"></script>
@@ -22,7 +21,7 @@
         <div class="container-fluid">
 
           <div class="navbar-header">
-            <a href="dashboard.php" class="navbar-brand"><img src="./../../files/logo/brandimagev2.png" class="img-responsive"></a>
+            <a href="index.php" class="navbar-brand"><img src="./../../files/logo/brandimagev2.png" class="img-responsive"></a>
           </div>
 
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -42,9 +41,10 @@
           <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
               <li>
-                <a href="dashboard.php"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
+                <a href="index.php"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
                 <ul class="nav" id="mn-sub-menu">
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="account.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Accounts</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Search Patient</a></li>
                   <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
                 </ul>
               </li>
@@ -52,7 +52,7 @@
               <li>
                   <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
                   <ul class="nav" id="mn-sub-menu">
-                      <li><a href="patientsettings.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Patient</a></li>
+                      <li><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
                       <li style="color: #000000;background-color: #b7d7f0;"><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
                       <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
                       <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
@@ -127,7 +127,6 @@
                       <h3 class="panel-title">Doctors</h3>
                       <div class="pull-right">
                         <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
-                        <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_doctor"><span class="fa fa-plus"></span> Add</button>
                       </div>
                     </div>
 

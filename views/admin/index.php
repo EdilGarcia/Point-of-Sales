@@ -7,8 +7,8 @@
     <title>
       Makati PET/CT Center
     </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="./../../css/w3.css">
     <link rel="stylesheet" type="text/css" href="./../../css/dashboard.css">
     <script src="./../../js/jquery-3.3.1.min.js"></script>
     <script src="./../../js/jquery-ui.min.js"></script>
@@ -39,18 +39,28 @@
             <li class="active">
               <a href="#"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
               <ul class="nav" id="mn-sub-menu">
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
-                  <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
+                <li><a href="account.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Accounts</a></li>
+                <li><a href="patientsearch.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
               </ul>
             </li>
             <li>
-                <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
-                <ul class="nav" id="mn-sub-menu">
-                    <li><a href="patientsettings.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Patient</a></li>
-                    <li><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
-                    <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
-                    <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
-                </ul>
+              <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
+              <ul class="nav" id="mn-sub-menu">
+                <li><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
+                <li><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
+                <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
+                <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
+              </ul>
+            </li>
+            <li>
+              <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp Reports</a>
+              <ul class="nav" id="mn-sub-menu">
+                <li><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
+                <li><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
+                <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
+                <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -61,29 +71,70 @@
                 <div class="col-sm-12 col-md-12">
                   <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <p class="lead">Welcome <?php echo $_SESSION['user_name']?>!</p>
+                      <p class="lead">Welcome <?php echo $_SESSION['user_name']?>!</p>
                     </div>
                   </div>
+                  <!-- Search  -->
                   <div class="row" style="padding-left:5%;">
-                    <div class="col-sm-4 col-md-4">
-                        <a href="patientsearch.php" class="btn btn-primary btn-lg">Search Patient</a>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                        <a href="./invoicecreation.php" class="btn btn-primary btn-lg" id="btn_invoice_creation">Transaction Search</a>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                        <a href="./patientsettings.php" class="btn btn-primary btn-lg" id="btn_patient_entry">Patient Entry</a>
+                    <div class="col-sm-12 col-md-12">
+                      <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                          <h4>Search</h4>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                          <a href="patientsearch.php" class="btn btn-default btn-md">Search Patient</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                          <a href="./invoicecreation.php" class="btn btn-default btn-md" id="btn_invoice_creation">Search Transaction</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="row"  style="padding-top:10px; padding-left:5%;">
-                    <div class="col-sm-4 col-md-4">
-                        <a href="./account.php" class="btn btn-primary btn-lg" id="btn_account_settings">Account Settings</a>
+                  <!-- Data Entry -->
+                  <div class="row" style="padding-top:10px; padding-left:5%;">
+                    <div class="col-sm-12 col-md-12">
+                      <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                          <h4>Data Entry</h4>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                          <a href="./patientsettings.php" class="btn btn-default btn-md" id="btn_patient_entry">Patient Entry</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                          <a href="./doctorsettings.php" class="btn btn-default btn-md" id="btn_patient_entry">Doctor Entry</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                          <a href="./itemsettings.php" class="btn btn-default btn-md" id="btn_patient_entry">Item Entry</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                          <a href="./treatmentsettings.php" class="btn btn-default btn-md" id="btn_patient_entry">Procedure Entry</a>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm-4 col-md-4">
-                        <a href="#" class="btn btn-primary btn-lg">Masterlist</a>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                        <a href="#" class="btn btn-primary btn-lg">Settings</a>
+                  </div>
+                  <!-- Settings -->
+                  <div class="row" style="padding-top:10px; padding-left:5%;">
+                    <div class="col-sm-12 col-md-12">
+                      <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                          <h4>Data Entry</h4>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <a href="./account.php" class="btn btn-default btn-md" id="btn_account_settings">Account Settings</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <a href="#" class="btn btn-default btn-md">Masterlist</a>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <a href="#" class="btn btn-default btn-md">Settings</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

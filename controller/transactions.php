@@ -23,7 +23,7 @@
       update_patient();
     else if(isset($_POST['doctor_update']))
       update_doctor();
-    else if(isset($_POST['update_procedure']))
+    else if(isset($_POST['procedure_update']))
       update_procedure();
     else if(isset($_POST['item_update']))
       update_item();
@@ -45,6 +45,8 @@
       delete_doctor();
     else if(isset($_POST['item_delete']))
       delete_item();
+    else if(isset($_POST['procedure_delete']))
+      delete_procedure();
     else if(isset($_POST['delete_invoice']))
       delete_invoice();
 
@@ -57,10 +59,10 @@
       activate_patient();
     else if(isset($_POST['doctor_activate']))
       activate_doctor();
-    // else if(isset($_POST['procedure_activate']))
-    //   activate_procedure();
-    // else if(isset($_POST['item_activate']))
-    //   activate_item();
+    else if(isset($_POST['procedure_activate']))
+      activate_procedure();
+    else if(isset($_POST['item_activate']))
+      activate_item();
 
     function add_item()
     {
@@ -630,44 +632,59 @@
     {
       require('db_connect.php');
       $user_id = $_POST['user_id'];
+      $path = $_POST['path'];
       $preparedStmt = "UPDATE `tbl_user` SET `user_status`= 2 WHERE `user_id` = :user_id;";
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':user_id', $user_id);
       $stmt->execute();
-      header("Location: ../views/admin/account.php");
+      header("Location: ".$path);
     }
     function delete_patient()
     {
         require('db_connect.php');
         $patient_id = $_POST['patient_id'];
+        $path = $_POST['path'];
         $preparedStmt = "UPDATE `tbl_patient` SET `patient_status`= 2 WHERE `patient_id` = :patient_id;";
         $stmt = $connection->prepare($preparedStmt);
         $stmt->bindParam(':patient_id', $patient_id);
         $stmt->execute();
-        header("Location: ../views/patientsettings.php");
+        header("Location: ".$path);
     }
 
     function delete_doctor() {
 
         require('db_connect.php');
         $doctor_id = $_POST['doctor_id'];
-
+        $path = $_POST['path'];
         $preparedStmt = "UPDATE `tbl_doctor` SET `doctor_status`= 2 WHERE `doctor_id` = :doctor_id;";
         $stmt = $connection->prepare($preparedStmt);
         $stmt->bindParam(':doctor_id', $doctor_id);
         $stmt->execute();
-
-        header("Location: ../views/doctorsettings.php");
+        header("Location: ".$path);
     }
 
-    function delete_item() {
+    function delete_item()
+    {
       require('db_connect.php');
       $item_id = $_POST['item_id'];
+      $path = $_POST['path'];
       $preparedStmt = "UPDATE `tbl_item` SET `item_status`= 2 WHERE `item_id` = :item_id;";
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':item_id', $item_id);
       $stmt->execute();
-      header("Location: ../views/itemsettings.php");
+      header("Location: ".$path);
+    }
+
+    function delete_procedure()
+    {
+      require('db_connect.php');
+      $procedure_id = $_POST['procedure_id'];
+      $path = $_POST['path'];
+      $preparedStmt = "UPDATE `tbl_procedure` SET `procedure_status`= 2 WHERE `procedure_id` = :procedure_id;";
+      $stmt = $connection->prepare($preparedStmt);
+      $stmt->bindParam(':procedure_id', $procedure_id);
+      $stmt->execute();
+      header("Location: ".$path);
     }
 
     function delete_invoice()
@@ -719,6 +736,18 @@
       header("Location: ".$path);
     }
 
+    function activate_procedure()
+    {
+      require('db_connect.php');
+      $procedure_id = $_POST['procedure_id'];
+      $path = $_POST['path'];
+      $preparedStmt = "UPDATE `tbl_procedure` SET `procedure_status`= 1 WHERE `procedure_id` = :procedure_id;";
+      $stmt = $connection->prepare($preparedStmt);
+      $stmt->bindParam(':procedure_id', $procedure_id);
+      $stmt->execute();
+      header("Location: ".$path);
+    }
+
     function activate_doctor()
     {
       require('db_connect.php');
@@ -727,6 +756,18 @@
       $preparedStmt = "UPDATE `tbl_doctor` SET `doctor_status`= 1 WHERE `doctor_id` = :doctor_id;";
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':doctor_id', $doctor_id);
+      $stmt->execute();
+      header("Location: ".$path);
+    }
+
+    function activate_item()
+    {
+      require('db_connect.php');
+      $item_id = $_POST['item_id'];
+      $path = $_POST['path'];
+      $preparedStmt = "UPDATE `tbl_item` SET `item_status`= 1 WHERE `item_id` = :item_id;";
+      $stmt = $connection->prepare($preparedStmt);
+      $stmt->bindParam(':item_id', $item_id);
       $stmt->execute();
       header("Location: ".$path);
     }

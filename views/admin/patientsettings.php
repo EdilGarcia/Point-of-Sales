@@ -7,9 +7,8 @@
     <title>
       Makati PET/CT Center
     </title>
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="./../../css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="./../../css/w3.css">
     <link rel="stylesheet" type="text/css" href="./../../css/setting.css">
     <script src="./../../js/jquery-3.3.1.min.js"></script>
     <script src="./../../js/jquery-ui.min.js"></script>
@@ -40,14 +39,15 @@
               <li>
                 <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
                 <ul class="nav" id="mn-sub-menu">
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="account.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Accounts</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Search Patient</a></li>
                   <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
                 </ul>
               </li>
               <li>
                   <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
                   <ul class="nav" id="mn-sub-menu">
-                      <li style="color: #000000;background-color: #b7d7f0;"><a href="patientsettings.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Patient</a></li>
+                      <li style="color: #000000;background-color: #b7d7f0;"><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
                       <li><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
                       <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
                       <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
@@ -96,7 +96,7 @@
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                         {
                       ?>
-                      <tr class="clickable-row">
+                        <tr class="clickable-row">
                           <td class="col-md-3"><?php echo $row['patient_name']; ?></td>
                           <td class="col-md-2"><?php echo $row['patient_gender']; ?></td>
                           <td class="col-md-2"><?php echo $row['patient_date_of_birth']; ?></td>
@@ -139,12 +139,18 @@
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                         {
                       ?>
-                      <tr class="clickable-row">
+                        <tr class="clickable-row">
                           <td class="col-md-3"><?php echo $row['patient_name']; ?></td>
                           <td class="col-md-2"><?php echo $row['patient_gender']; ?></td>
                           <td class="col-md-2"><?php echo $row['patient_date_of_birth']; ?></td>
                           <td class="col-md-3"><?php echo $row['patient_address']; ?></td>
-                          <td class="col-md-2"><input type="submit" class="btn btn-success btn-sm patient_restore" value="Restore" id="<?php echo $row['patient_id']; ?>" name="patient_restore"/></td>
+                          <td class="col-md-2">
+                            <form method="POST" action="./../../controller/transactions.php">
+                              <input type="hidden" name=path value="./../views/admin/patientsettings.php"/>
+                              <input type="hidden" name=patient_id value="<?php echo $row['patient_id']; ?>"/>
+                              <input type="submit" class="btn btn-success btn-sm" value="Restore" name="patient_activate"/>
+                            </form>
+                          </td>
                         </tr>
                         <?php
                         }
