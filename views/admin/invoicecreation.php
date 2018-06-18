@@ -73,7 +73,7 @@
                       <h3 class="panel-title">Transaction</h3>
                       <div class="pull-right">
                           <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
-                          <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_transaction"><span class="fa fa-plus"></span> Add</button>
+                          <button class="btn btn-default btn-md" data-toggle="modal" id="open_new_transaction"><span class="fa fa-plus"></span> Add</button>
                       </div>
                     </div>
 
@@ -114,11 +114,7 @@
                                     <?php
                                       if($row['invoice_type'] == 'invoice')
                                         echo ('<td>
-                                                <form method="POST" action="./../../controller/transactions.php">
-                                                  <input type="hidden" name="path" value="./../views/admin/invoicecreation.php"/>
-                                                  <input type="hidden" name="parameter_id" value="'.$row['invoice_id'].'"/>
-                                                  <input type="submit" class="btn btn-sm btn-primary" name="invoice_param" value="Check out"/>
-                                                </form>
+                                                <button type="button" class="btn btn-sm btn-primary check_out_btn">Check out</button>
                                               </td>
                                               <td>
                                                 <form method="POST" action="./../../controller/transactions.php">
@@ -228,10 +224,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Patient Information</h4>
+            <h4 class="modal-title">Create Transaction</h4>
           </div>
           <div class="modal-body">
-            
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -241,7 +237,32 @@
       </div>
     </div>
 
-    <div id="patient_invoice" class="modal fade" role="dialog">
+    <!-- Modal -->
+    <div id="check_out_modal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Invoice Check-out</h4>
+          </div>
+
+          <form>
+            <div class="modal-body">
+              <div id="check_out_modal_body">
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" name="proceed_btn" value="Proceed">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="new_invoice" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -253,7 +274,7 @@
           </div>
           <form class='form-horizontal' role='form' method='POST' action='./../../controller/transactions.php'>
             <div class="modal-body">
-              <div id="patient_invoice_body">
+              <div id="new_invoice_body">
               </div>
             </div>
 
@@ -306,17 +327,27 @@
     <script type="text/javascript">
       var doc_field_count = 0;
       var proc_field_count = 0;
+      var selected_patient_index = 0;
       function count_fields()
       {
         doc_field_count = $('.remove_doctor_field_btn').length;
         proc_field_count = $('.remove_procedure_field_btn').length;
       }
 
+
+      function toggle_patient_fields(str)
+      {
+        if(str == 'id')
+          document.getElementById("patient_name_list").selectedIndex = selected_patient_index;
+        else
+          document.getElementById("patient_id_list").selectedIndex = selected_patient_index;
+      }
+
       function calc_total_cost()
       {
         // Calculate total Cost
-        var selected = $('select').map(function(){
-              return this.value
+        var selected = $('select.costed_select').map(function(){
+            return this.value
         }).get();
         var total_proc_cost = 0;
         for(var x=0;x<selected.length;x++)
@@ -327,51 +358,66 @@
         $("#total_proc_cost").text(total_proc_cost);
       }
 
+      function change_list_values(str)
+      {
+        if(str == 'id')
+        {
+          var index = document.getElementById("patient_name_list").selectedIndex;
+          document.getElementById("patient_id_list").selectedIndex = index;
+        }
+        else
+        {
+          var index = document.getElementById("patient_id_list").selectedIndex;
+          document.getElementById("patient_name_list").selectedIndex = index;
+        }
+      }
+
       $(document).ready(function(){
         $('.filterable .btn-filter').click(function(){
-            var $panel = $(this).parents('.filterable'),
-            $filters = $panel.find('.filters input'),
-            $tbody = $panel.find('.table tbody');
-            if ($filters.prop('disabled') == true) {
-                $filters.prop('disabled', false);
-                $filters.first().focus();
-            } else {
-                $filters.val('').prop('disabled', true);
-                $tbody.find('.no-result').remove();
-                $tbody.find('tr').show();
-            }
+          var $panel = $(this).parents('.filterable'),
+          $filters = $panel.find('.filters input'),
+          $tbody = $panel.find('.table tbody');
+          if ($filters.prop('disabled') == true) {
+              $filters.prop('disabled', false);
+              $filters.first().focus();
+          } else {
+              $filters.val('').prop('disabled', true);
+              $tbody.find('.no-result').remove();
+              $tbody.find('tr').show();
+          }
+
         });
 
         $('.filterable .filters input').keyup(function(e){
-            /* Ignore tab key */
-            var code = e.keyCode || e.which;
-            if (code == '9') return;
+          /* Ignore tab key */
+          var code = e.keyCode || e.which;
+          if (code == '9') return;
 
-            /* Useful DOM data and selectors */
-            var $input = $(this),
-            inputContent = $input.val().toLowerCase(),
-            $panel = $input.parents('.filterable'),
-            column = $panel.find('.filters th').index($input.parents('th')),
-            $table = $panel.find('.table'),
-            $rows = $table.find('tbody tr');
+          /* Useful DOM data and selectors */
+          var $input = $(this),
+          inputContent = $input.val().toLowerCase(),
+          $panel = $input.parents('.filterable'),
+          column = $panel.find('.filters th').index($input.parents('th')),
+          $table = $panel.find('.table'),
+          $rows = $table.find('tbody tr');
 
-            /* Dirtiest filter function ever ;) */
-            var $filteredRows = $rows.filter(function(){
-                var value = $(this).find('td').eq(column).text().toLowerCase();
-                return value.indexOf(inputContent) === -1;
-            });
+          /* Dirtiest filter function ever ;) */
+          var $filteredRows = $rows.filter(function(){
+              var value = $(this).find('td').eq(column).text().toLowerCase();
+              return value.indexOf(inputContent) === -1;
+          });
 
-            /* Clean previous no-result if exist */
-            $table.find('tbody .no-result').remove();
+          /* Clean previous no-result if exist */
+          $table.find('tbody .no-result').remove();
 
-            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
-            $rows.show();
-            $filteredRows.hide();
+          /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+          $rows.show();
+          $filteredRows.hide();
 
-            /* Prepend no-result row if all rows are filtered */
-            if ($filteredRows.length === $rows.length) {
-                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
-            }
+          /* Prepend no-result row if all rows are filtered */
+          if ($filteredRows.length === $rows.length) {
+              $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+          }
         });
       });
 
@@ -383,7 +429,7 @@
         var first = document.getElementById('procedure_select');
         var options = first.innerHTML;
         // Append To Div
-        var txt_append = "<div class='row'><div class='col-md-10'><select class='form-control' name='procedures[]'>"+ options +"</select></div><div class='col-md-2'><a href='#' class='btn btn-default remove_procedure_field_btn'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></a></div></div>";
+        var txt_append = "<div class='row'><div class='col-md-10'><select class='form-control costed_select' name='procedures[]'>"+ options +"</select></div><div class='col-md-2'><a href='#' class='btn btn-default remove_procedure_field_btn'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></a></div></div>";
         $add_select.append(txt_append);
         proc_field_count++;
       });
@@ -394,7 +440,7 @@
         var first = document.getElementById('doctor_select');
         var options = first.innerHTML;
         // Append To Div
-        var txt_append = "<div class='row'><div class='col-md-10'><select class='form-control' name='doctors[]'>"+ options +"</select></div><div class='col-md-2'><a href='#' class='btn btn-default remove_doctor_field_btn'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></a></div></div>";
+        var txt_append = "<div class='row'><div class='col-md-10'><select class='form-control costed_select' name='doctors[]'>"+ options +"</select></div><div class='col-md-2'><a href='#' class='btn btn-default remove_doctor_field_btn'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></a></div></div>";
         $add_select.append(txt_append);
         doc_field_count++;
       });
@@ -420,7 +466,15 @@
       });
 
       $(document).on("change", "select", function() {
-        calc_total_cost()
+        calc_total_cost();
+      });
+
+      $(document).on("change", "#patient_name_list", function() {
+        change_list_values('id');
+      });
+
+      $(document).on("change", "#patient_id_list", function() {
+        change_list_values('name');
       });
 
       $(document).on("click", ".view_btn", function() {
@@ -445,8 +499,53 @@
         });
       });
 
-      $(document).on("click", ".create_recipt_btn", function() {
+      $(document).on("click", "#open_new_transaction", function() {
+        var path = "./../views/admin/invoicecreation.php";
+        $.ajax({
+          url: "./../../controller/modal_views.php",
+          method: "post",
+          data: { create_new_invoice: 0,
+                  path: path},
+          success: function(data) {
+            $('#new_invoice_body').html(data);
+            $('#new_invoice').modal('show');
+          }
+        });
+      });
 
+      $(document).on("change", "#payment_mode_select", function() {
+        var value = $('#payment_mode_select').val();
+        if(value == 'cash')
+        {
+          $('.payment_cash').show();
+        }
+        else
+        {
+          $('.payment_cash').hide();
+        }
+      });
+
+      $(document).on("change", "#cash_paid_value", function() {
+        var value = $('#cash_paid_value').val();
+        var due = $('#payment_cost_due').html();
+        if(value > due)
+        {
+          $('#cash_change').html("PHP "+(value-due));
+        }
+      });
+
+      $(document).on("click", ".check_out_btn", function() {
+        var path = "./../views/admin/invoicecreation.php";
+        $.ajax({
+          url: "./../../controller/modal_views.php",
+          method: "post",
+          data: { check_out_invoice: 0,
+                  path: path},
+          success: function(data) {
+            $('#check_out_modal_body').html(data);
+            $('#check_out_modal').modal('show');
+          }
+        });
       });
 
       $(document).on("click", ".edit_btn", function() {
@@ -480,6 +579,72 @@
             calc_total_cost();
           }
         });
+      });
+
+      $(document).on("focus", "#patient_name_filter", function(){
+        setInterval(function()
+        {
+          var filter_word = document.getElementById("patient_name_filter").value;
+          var select = document.getElementById("patient_name_list");
+          var selected = false;
+          if(filter_word.length > 0)
+          {
+            for(var x = 0 ; x < select.length; x++)
+            {
+              var txt = select.options[x].text;
+              if (txt.substring(0, filter_word.length).toLowerCase() !== filter_word.toLowerCase() && filter_word.trim() !== ""){
+                $(select.options[x]).attr('disabled','disabled').hide();
+              }
+              else{
+                $(select.options[x]).removeAttr('disabled').show();
+                if(selected == false)
+                {
+                  selected_patient_index = x;
+                  select.selectedIndex = selected_patient_index;
+                  change_list_values('id');
+                }
+              }
+            }
+          }
+          else {
+            for (var x = 0; x < select.length; x++){
+              $(select.options[x]).removeAttr('disabled').show();
+            }
+          }
+        }, 500);
+      });
+
+      $(document).on("focus", "#patient_id_filter", function(){
+        setInterval(function()
+        {
+          var filter_word = document.getElementById("patient_id_filter").value.split('').reverse().join('');
+          var select = document.getElementById("patient_id_list");
+          var selected = false;
+          if(filter_word.length > 0)
+          {
+            for(var x = 0 ; x < select.length; x++)
+            {
+              var txt = select.options[x].text.split('').reverse().join('');
+              if (txt.substring(0, filter_word.length).toLowerCase() !== filter_word.toLowerCase() && filter_word.trim() !== ""){
+                $(select.options[x]).attr('disabled','disabled').hide();
+              }
+              else{
+                $(select.options[x]).removeAttr('disabled').show();
+                if(selected == false)
+                {
+                  selected_patient_index = x;
+                  select.selectedIndex = selected_patient_index;
+                  change_list_values('name');
+                }
+              }
+            }
+          }
+          else {
+            for (var x = 0; x < select.length; x++){
+              $(select.options[x]).removeAttr('disabled').show();
+            }
+          }
+        }, 500);
       });
     </script>
   </body>

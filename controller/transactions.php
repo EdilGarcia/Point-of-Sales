@@ -217,12 +217,12 @@
       if(isset($_POST['path']))
         $path = $_POST['path'];
       else
-        $path = "../forms/dashboard.html";
+        $path = "../views/admin/";
       $invoice_id = get_smart_id("invoice");
       $invoice_date = date("Y-m-d");
       $patient_id_fk = $_POST['patient_id_fk'];
       $user_id_fk = $_POST['user_id_fk'];
-      $invoice_cost = 0;
+      $payment_cost = 0;
       if(isset($_POST['transac_quotation']))
          $invoice_type = "quotation";
        if(isset($_POST['transac_invoice']))
@@ -233,7 +233,7 @@
       {
         $split = explode("//",$doctors[$x]);
         array_push($doctor_id_fk,$split[0]);
-        $invoice_cost += intval($split[1]);
+        $payment_cost += intval($split[1]);
       }
 
       $procedures = $_POST['procedures'];
@@ -242,18 +242,17 @@
       {
         $split = explode("//",$procedures[$x]);
         array_push($procedure_id_fk,$split[0]);
-        $invoice_cost += intval($split[1]);
+        $payment_cost += intval($split[1]);
       }
 
-      $stmt = $connection->prepare("INSERT INTO `tbl_invoice`(`invoice_id`, `invoice_date`, `patient_id_fk`, `user_id_fk`, `invoice_type`, `invoice_cost`)
-        VALUES (:invoice_id, :invoice_date, :patient_id_fk, :user_id_fk, :invoice_type, :invoice_cost)");
+      $stmt = $connection->prepare("INSERT INTO `tbl_invoice`(`invoice_id`, `invoice_date`, `patient_id_fk`, `user_id_fk`, `invoice_type`)
+        VALUES (:invoice_id, :invoice_date, :patient_id_fk, :user_id_fk, :invoice_type)");
 
       $stmt->bindParam(':invoice_id', $invoice_id);
       $stmt->bindParam(':invoice_date', $invoice_date);
       $stmt->bindParam(':patient_id_fk', $patient_id_fk);
       $stmt->bindParam(':user_id_fk', $user_id_fk);
       $stmt->bindParam(':invoice_type', $invoice_type);
-      $stmt->bindParam(':invoice_cost', $invoice_cost);
       $stmt->execute();
 
       // DOCTORS
@@ -291,6 +290,13 @@
         $stmt->execute($insertData);
       }
       $stmt = null;
+      // payment_detail
+      $stmt = $connection->prepare("INSERT INTO `tbl_payment`(`invoice_id_fk`, `payment_cost`, `payment_status`, `payment_method`)
+                                  VALUES (:invoice_id_fk, :payment_cost, 'unpaid', 'null')");
+      $stmt->bindParam(':invoice_id_fk', $invoice_id);
+      $stmt->bindParam(':payment_cost', $payment_cost);
+      $stmt->execute();
+
       header("Location: ".$path);
     }
 
@@ -421,26 +427,26 @@
         $procedure_id_fk = array();
         $doctors = $_POST['doctors'];
         $doctor_id_fk = array();
-        $invoice_cost = 0;
+        $payment_cost = 0;
 
         for($x=0;$x<count($procedures);$x++)
         {
           $split = explode("//",$procedures[$x]);
           array_push($procedure_id_fk,$split[0]);
-          $invoice_cost += intval($split[1]);
+          $payment_cost += intval($split[1]);
         }
 
         for($x=0;$x<count($doctors);$x++)
         {
           $split = explode("//",$doctors[$x]);
           array_push($doctor_id_fk,$split[0]);
-          $invoice_cost += intval($split[1]);
+          $payment_cost += intval($split[1]);
         }
 
-        $preparedStmt = "UPDATE `tbl_invoice` SET `invoice_cost`=:invoice_cost WHERE invoice_id=:invoice_id";
+        $preparedStmt = "UPDATE `tbl_payment` SET `payment_cost`=:payment_cost WHERE invoice_id=:invoice_id";
         $stmt = $connection->prepare($preparedStmt);
         $stmt->bindParam(':invoice_id', $invoice_id);
-        $stmt->bindParam(':invoice_cost', $invoice_cost);
+        $stmt->bindParam(':payment_cost', $payment_cost);
         $stmt->execute();
 
         $preparedStmt = "DELETE FROM `tbl_invoice_doctor` WHERE invoice_id_fk=:invoice_id_fk";
