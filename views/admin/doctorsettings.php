@@ -84,15 +84,15 @@
 
                   <table class="table table-hover">
                       <thead>
-                          <tr class="filters">
-                              <th class="col-md-2"><input type="text" class="form-control" placeholder="Name" disabled></th>
-                              <th class="col-md-1"><input type="text" class="form-control" placeholder="Gender" disabled></th>
-                              <th class="col-md-2"><input type="text" class="form-control" placeholder="Date of Birth" disabled></th>
-                              <th class="col-md-2"><input type="text" class="form-control" placeholder="Address" disabled></th>
-                              <th class="col-md-2"><input type="text" class="form-control" placeholder="Contact No." disabled></th>
-                              <th class="col-md-1"><input type="text" class="form-control" placeholder="Fee" disabled></th>
-                              <th class="col-md-2">Action</th>
-                          </tr>
+                        <tr class="filters">
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Name" disabled></th>
+                          <th class="col-md-1"><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Date of Birth" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Address" disabled></th>
+                          <th class="col-md-2"><input type="text" class="form-control" placeholder="Contact No." disabled></th>
+                          <th class="col-md-1"><input type="text" class="form-control" placeholder="Fee" disabled></th>
+                          <th class="col-md-2">Action</th>
+                        </tr>
                       </thead>
 
                       <tbody>
@@ -201,6 +201,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <input type="hidden" value="0" name="doctor_add" id="doctor_add">
+                    <input type="hidden" value="./../views/admin/doctorsettings.php" name="path" id="path">
                   </div>
                 </div>
                 <div class="row">

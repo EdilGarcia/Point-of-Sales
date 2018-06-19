@@ -399,8 +399,13 @@
 
   function check_out_invoice()
   {
+    require('db_connect.php');
     $output = "
     <div class='container-fluid'>
+    <input type='hidden' name='invoice_param' value='0'/>
+    <input type='hidden' name='invoice_id' value='".$_POST['invoice_id_fk']."'/>
+      <input type='hidden' name='path' value='".$_POST['path']."'/>";
+    $output .= "
       <div class='row'>
         <div class='col-sm-12'>
           <h5>Payment Mode:</h5>
@@ -408,7 +413,7 @@
       </div>
       <div class='row'>
         <div class='col-sm-12'>
-          <select class='form-control' id='payment_mode_select' name='payment_mode'>
+          <select class='form-control' id='payment_mode_select' name='payment_method'>
             <option value='cash'>Cash</option>
             <option value='credit_card'>Credit Card</option>
             <option value='debit_card'>Credit Card</option>
@@ -421,15 +426,22 @@
           <h5>Amount paid:</h5>
         </div>
         <div class='col-sm-8'>
-          <input type='number' class='form-control' id='cash_paid_value' name='paid_value' value='0' min='0'/>
+          <input type='number' class='form-control' id='payment_paid_amount' name='payment_paid_amount' id='paid_value' value='0' min='0' step='100'/>
         </div>
       </div>
       <div class='row'>
         <div class='col-sm-4'>
           <h6>Amout Due:</h6>
-        </div>
+        </div>";
+    $preparedStmt = "SELECT payment_cost FROM `tbl_payment` WHERE invoice_id_fk=:invoice_id_fk";
+    $stmt = $connection->prepare($preparedStmt);
+    $stmt->bindParam(':invoice_id_fk', $_POST['invoice_id_fk']);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $output .="
         <div class='col-sm-4'>
-          <h6>PHP <b id='payment_cost_due'>8500.00</b></h6>
+          <input type='hidden' class='form-control' value='".$row['payment_cost']."' name='payment_cost' id='payment_cost'>
+          <h6>PHP <b>".$row['payment_cost']."</b></h6>
         </div>
       </div>
       <div class='row payment_cash'>
@@ -973,14 +985,14 @@
           </div>
           <div class="row">
             <div class="col-md-4 pull-right">
-               <p class="pull-left"><strong>Total: </strong>'.$total_amount.'</p>
+             <p class="pull-left"><strong>Total: </strong>'.$total_amount.'</p>
             </div>
           </div>';
     if($_POST['printable'] == 1)
     $output .= '
           <div class="row">
             <div class="col-md-4 pull-right">
-               <button type="button" class="btn pull-left print_invoice" name="'.$get_values.'">Print</button>
+             <button type="button" class="btn pull-left print_invoice" name="'.$get_values.'">Print</button>
             </div>
           </div>
         </div>';
@@ -1151,7 +1163,7 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-4 col-md-offset-7">
-                      <input type="submit" class="btn btn-default pull-right" id="patient_delete" name="patient_delete" value="Delete"/>
+                      <input type="submit" class="btn btn-default pull-right" id="patient_delete" name="1_delete" value="Delete"/>
                   </div>
                 </div>
               </div>
@@ -1769,8 +1781,8 @@
         <form class="form-horizontal" role="form" method="post" action="./../../controller/transactions.php">
           <div class="container-fluid">
             <input type="hidden" name="user_id" id="user_id" value="'.$row["user_id"].'"/>
-            <input type="hidden" name="user_activate" value="0"/>
-
+            <input type="hidden" name="user_activate" value="'.$_POST["path"].'"/>
+            <input type="hidden" name="path" value="0"/>
             <div class="form-group">
               <div class="row">
                 <div class="col-md-10 col-md-offset-1">

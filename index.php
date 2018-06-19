@@ -16,11 +16,9 @@
 				$_SESSION['user_username'] = $row['user_username'];
 				$_SESSION['user_id'] = $row['user_id'];
 				$_SESSION['user_account_type'] = $row['user_account_type'];
-				
-				if($_SESSION['user_account_type'] == "admin 2")
+
+				if($_SESSION['user_account_type'] == "admin 2" || $_SESSION['user_account_type'] == "admin")
 					header("Location: views/admin/");
-					if($_SESSION['user_account_type'] == "admin")
-						header("Location: views/sub_admin/");
 				else if($_SESSION['user_account_type'] == "user")
 					header("Location: views/user/dashboard.php");
 				else if($_SESSION['user_account_type'] == "accounting")
@@ -117,19 +115,20 @@
 	                <div class="form-group">
 	                  	<div class="col-md-12">
 	                    	<input type="hidden" value="0" name="user_add" id="user_add">
-							<input type="hidden" value="index.php" name="page">
+												<input type="hidden" value="./../" name="path">
+												<input type="hidden" value="0" name="register_user">
 	                  	</div>
 	                </div>
 
 	                <div class="form-group">
-						<div class="row">
+										<div class="row">
 		                    <div class="col-md-10 col-md-offset-1">
 		                    	<div class="col-md-3">
 		                      		<label id="add_top_padding"> User Level </label>
 		                      	</div>
 
 		                      	<div class="col-md-9">
-									<label class="radio-inline">
+															<label class="radio-inline">
 				                        <input type="radio" value="Admin" name="user_type" id="user_type_admin" required/>Admin
 				                     </label>
 
@@ -268,7 +267,7 @@
 	<script type="text/javascript">
 
 		$(document).ready(function(){
-			
+
 			var year = new Date();
 		    var current_year = year.getFullYear();
 		    document.getElementById("year").innerHTML = current_year;

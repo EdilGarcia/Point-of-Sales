@@ -247,14 +247,14 @@
             <h4 class="modal-title">Invoice Check-out</h4>
           </div>
 
-          <form>
+          <form method="post" action="./../../controller/transactions.php">
             <div class="modal-body">
               <div id="check_out_modal_body">
               </div>
             </div>
 
             <div class="modal-footer">
-              <input type="submit" class="btn btn-primary" name="proceed_btn" value="Proceed">
+              <input type="submit" class="btn btn-primary" id="proceed_btn" name="proceed_btn" value="Proceed" disabled>
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
           </div>
@@ -385,7 +385,6 @@
               $tbody.find('.no-result').remove();
               $tbody.find('tr').show();
           }
-
         });
 
         $('.filterable .filters input').keyup(function(e){
@@ -525,21 +524,14 @@
         }
       });
 
-      $(document).on("change", "#cash_paid_value", function() {
-        var value = $('#cash_paid_value').val();
-        var due = $('#payment_cost_due').html();
-        if(value > due)
-        {
-          $('#cash_change').html("PHP "+(value-due));
-        }
-      });
-
       $(document).on("click", ".check_out_btn", function() {
         var path = "./../views/admin/invoicecreation.php";
+        var invoice_id_fk = $(this).closest('.clickable-row').find('.invoice_id').html();
         $.ajax({
           url: "./../../controller/modal_views.php",
           method: "post",
           data: { check_out_invoice: 0,
+                  invoice_id_fk: invoice_id_fk,
                   path: path},
           success: function(data) {
             $('#check_out_modal_body').html(data);
@@ -646,6 +638,27 @@
           }
         }, 500);
       });
+
+      $(document).on("click", ".print_invoice" , function(){
+        var invoice_id = ($(this).attr('name'));
+        var myWindow = window.open("./invoice.php?"+invoice_id, "InvWindow");
+      });
+
+      $(document).on("change", "#payment_paid_amount" , function(){
+        var amount_paid = $('#payment_paid_amount').val();
+        var amount_need = $('#payment_cost').val();
+        if(amount_paid - amount_need >= 0)
+        {
+          $('#cash_change').html("PHP "+(amount_paid - amount_need));
+          $("#proceed_btn").removeAttr("disabled");
+        }
+        else
+        {
+          $('#cash_change').html("PHP 0.00");
+          $("#proceed_btn").attr("disabled", "disabled");
+        }
+      });
+
     </script>
   </body>
 </html>

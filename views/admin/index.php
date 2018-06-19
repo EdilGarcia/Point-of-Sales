@@ -53,7 +53,7 @@
                 <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
               </ul>
             </li>
-            <li>
+            <!-- <li>
               <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp Reports</a>
               <ul class="nav" id="mn-sub-menu">
                 <li><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
@@ -61,7 +61,7 @@
                 <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
                 <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
               </ul>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" style="overflow-y:auto; height:100vh; padding-top:20vh;">

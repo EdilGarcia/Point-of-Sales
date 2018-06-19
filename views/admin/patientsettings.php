@@ -181,6 +181,7 @@
               <form class="form-horizontal" role="form" method="post" action="./../../controller/transactions.php">
 
                 <input type="hidden" value="0" name="patient_add" id="patient_add">
+                <input type="hidden" value="./../views/admin/patientsettings.php" name="path" id="path">
 
                 <div class="form-group">
                   <div class="row">

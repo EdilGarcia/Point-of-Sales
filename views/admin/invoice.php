@@ -1,7 +1,6 @@
 <?php
   session_start();
   require('././../../controller/db_connect.php');
-  $total_amount = 0;
   $invoice_id = $_GET['invoice_id'];
   // Get Invoice Details
   $preparedStmt = "SELECT * FROM `tbl_invoice` WHERE invoice_id=:invoice_id";
@@ -14,6 +13,16 @@
   $invoice_requested = $mydate['year'].'-'.$mydate['mon'].'-'.$mydate['mday'].'  /  '.$mydate['hours'].':'.$mydate['minutes'];
   $patient_id_fk = $row['patient_id_fk'];
   $user_id_fk = $row['user_id_fk'];
+  // Get Payment Details if any
+  $preparedStmt = "SELECT * FROM `tbl_payment` WHERE invoice_id_fk=:invoice_id";
+  $stmt = $connection->prepare($preparedStmt);
+  $stmt->bindParam(':invoice_id', $invoice_id);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $total_amount = $row['payment_cost'];
+  $payment_paid_amount = $row['payment_paid_amount'];
+  $payment_status = $row['payment_status'];
+  $payment_method = $row['payment_method'];
   // Get Patient Details
   $preparedStmt = "SELECT * FROM `tbl_patient` WHERE patient_id=:patient_id_fk";
   $stmt = $connection->prepare($preparedStmt);
@@ -61,7 +70,6 @@
   {
     array_push($doctor_name, $row['doctor_name']);
     array_push($doctor_fee, $row['doctor_professional_fee']);
-    $total_amount += $row['doctor_professional_fee'];
   }
 
   // Get procedure_id/s
@@ -91,7 +99,6 @@
   {
     array_push($procedure_name, $row['procedure_name']);
     array_push($procedure_cost, $row['procedure_cost']);
-    $total_amount += $row['procedure_cost'];
   }
   // Get procedure items per procedure
   $preparedStmt = "SELECT tbl_procedure.procedure_id, tbl_item.item_name, tbl_procedure_item.quantity
@@ -231,6 +238,36 @@
           </div>
         </div>
 
+        <div class="row justify-content-center">
+          <div class="col-xs-3 align-self-center"></div>
+          <div class="col-xs-3 align-self-center"></div>
+          <div class="col-xs-3 align-self-center">
+            <p class="pull-right"><strong>Payment Status: </strong></p>
+          </div>
+          <div class="col-xs-2 align-self-center">
+            <p class="pull-left">
+              <?php
+                echo $payment_status;
+              ?>
+            </p>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-xs-3 align-self-center"></div>
+          <div class="col-xs-3 align-self-center"></div>
+          <div class="col-xs-3 align-self-center">
+            <p class="pull-right"><strong>Payment Method: </strong></p>
+          </div>
+          <div class="col-xs-2 align-self-center">
+            <p class="pull-left">
+              <?php
+                echo $payment_method;
+              ?>
+            </p>
+          </div>
+        </div>
+
         <div class="row padding-top-2">
           <div class="col-md-12">
             <div class="panel panel-default">
@@ -242,7 +279,7 @@
                   <table class="table table-condensed">
                     <tr>
                       <th>Procedure</th>
-                      <th>Items</th>
+                      <th>Items Inclued</th>
                       <th>Cost</th>
                     </tr>
         <?php
@@ -281,6 +318,23 @@
                       <td class="highrow"></td>
                       <td class="highrow"><p><strong>Total fee: </strong></p></td>
                       <td class="highrow"><?php echo $total_amount;?></td>
+                    </tr>
+                    <tr>
+                      <td class="emptyrow"></td>
+                      <td class="emptyrow"><p>Amount given: </p></td>
+                      <td class="emptyrow"><?php echo $payment_paid_amount;?></td>
+                    </tr>
+                    <tr>
+                      <td class="emptyrow"></td>
+                      <td class="emptyrow"><p>Change: </p></td>
+                      <td class="highrow">
+                        <?php
+                          if($payment_paid_amount-$total_amount>0)
+                            echo($payment_paid_amount-$total_amount);
+                          else 
+                            echo('0');
+                        ?>
+                      </td>
                     </tr>
                   </table>
                 </div>

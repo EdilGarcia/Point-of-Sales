@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2018 at 06:06 AM
+-- Generation Time: Jun 18, 2018 at 12:27 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -30,7 +30,6 @@ USE `db_pos_petct`;
 -- Table structure for table `tbl_doctor`
 --
 
-DROP TABLE IF EXISTS `tbl_doctor`;
 CREATE TABLE `tbl_doctor` (
   `doctor_id` varchar(11) NOT NULL,
   `doctor_name` varchar(45) NOT NULL,
@@ -55,31 +54,22 @@ INSERT INTO `tbl_doctor` (`doctor_id`, `doctor_name`, `doctor_gender`, `doctor_d
 -- Table structure for table `tbl_invoice`
 --
 
-DROP TABLE IF EXISTS `tbl_invoice`;
 CREATE TABLE `tbl_invoice` (
   `invoice_id` varchar(11) NOT NULL,
   `invoice_date` date NOT NULL,
   `patient_id_fk` varchar(11) NOT NULL,
   `user_id_fk` varchar(11) DEFAULT NULL,
   `invoice_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Active, 2 = Deleted',
-  `invoice_type` varchar(9) NOT NULL,
-  `invoice_cost` float NOT NULL DEFAULT '0'
+  `invoice_type` varchar(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_invoice`
 --
 
-INSERT INTO `tbl_invoice` (`invoice_id`, `invoice_date`, `patient_id_fk`, `user_id_fk`, `invoice_status`, `invoice_type`, `invoice_cost`) VALUES
-('180404_001', '2018-04-04', 'ptnt_000001', 'usr_0000001', 1, 'invoice', 8300),
-('180413_001', '2018-04-13', 'ptnt_000001', 'usr_0000001', 1, 'invoice', 10000),
-('180413_002', '2018-04-13', 'ptnt_000003', 'usr_0000001', 1, 'receipt', 10000),
-('180519_002', '2018-05-19', 'ptnt_000003', 'usr_0000001', 1, 'invoice', 7500),
-('180524_001', '2018-05-24', 'ptnt_000003', 'usr_0000001', 2, 'quotation', 7500),
-('180524_002', '2018-05-24', 'ptnt_000003', 'usr_0000001', 2, 'quotation', 5900),
-('180524_003', '2018-05-24', 'ptnt_000003', 'usr_0000001', 2, 'quotation', 12500),
-('180524_004', '2018-05-24', 'ptnt_000003', 'usr_0000001', 1, 'receipt', 12500),
-('180524_005', '2018-05-24', 'ptnt_000003', 'usr_0000001', 1, 'quotation', 5800);
+INSERT INTO `tbl_invoice` (`invoice_id`, `invoice_date`, `patient_id_fk`, `user_id_fk`, `invoice_status`, `invoice_type`) VALUES
+('180618_001', '2018-06-18', 'ptnt_000001', 'usr_0000001', 1, 'invoice'),
+('180618_002', '2018-06-18', 'ptnt_000004', 'usr_0000001', 1, 'invoice');
 
 -- --------------------------------------------------------
 
@@ -87,7 +77,6 @@ INSERT INTO `tbl_invoice` (`invoice_id`, `invoice_date`, `patient_id_fk`, `user_
 -- Table structure for table `tbl_invoice_doctor`
 --
 
-DROP TABLE IF EXISTS `tbl_invoice_doctor`;
 CREATE TABLE `tbl_invoice_doctor` (
   `doctor_id_fk` varchar(11) NOT NULL,
   `invoice_id_fk` varchar(11) NOT NULL
@@ -98,15 +87,8 @@ CREATE TABLE `tbl_invoice_doctor` (
 --
 
 INSERT INTO `tbl_invoice_doctor` (`doctor_id_fk`, `invoice_id_fk`) VALUES
-('doc_000001', '180413_001'),
-('doc_000001', '180413_002'),
-('doc_000001', '180519_002'),
-('doc_000001', '180524_001'),
-('doc_000001', '180524_002'),
-('doc_000001', '180524_003'),
-('doc_000001', '180524_004'),
-('doc_000001', '180524_005'),
-('doc_000001', '180404_001');
+('doc_000001', '180618_001'),
+('doc_000001', '180618_002');
 
 -- --------------------------------------------------------
 
@@ -114,7 +96,6 @@ INSERT INTO `tbl_invoice_doctor` (`doctor_id_fk`, `invoice_id_fk`) VALUES
 -- Table structure for table `tbl_invoice_procedure`
 --
 
-DROP TABLE IF EXISTS `tbl_invoice_procedure`;
 CREATE TABLE `tbl_invoice_procedure` (
   `invoice_id_fk` varchar(11) NOT NULL,
   `procedure_id_fk` varchar(11) NOT NULL
@@ -125,19 +106,8 @@ CREATE TABLE `tbl_invoice_procedure` (
 --
 
 INSERT INTO `tbl_invoice_procedure` (`invoice_id_fk`, `procedure_id_fk`) VALUES
-('180413_001', 'proc_000001'),
-('180413_002', 'proc_000002'),
-('180519_002', 'proc_000001'),
-('180524_001', 'proc_000001'),
-('180524_002', 'proc_000003'),
-('180524_002', 'proc_000004'),
-('180524_003', 'proc_000001'),
-('180524_003', 'proc_000002'),
-('180524_004', 'proc_000001'),
-('180524_004', 'proc_000002'),
-('180524_005', 'proc_000003'),
-('180404_001', 'proc_000001'),
-('180404_001', 'proc_000003');
+('180618_001', 'proc_000004'),
+('180618_002', 'proc_000001');
 
 -- --------------------------------------------------------
 
@@ -145,7 +115,6 @@ INSERT INTO `tbl_invoice_procedure` (`invoice_id_fk`, `procedure_id_fk`) VALUES
 -- Table structure for table `tbl_item`
 --
 
-DROP TABLE IF EXISTS `tbl_item`;
 CREATE TABLE `tbl_item` (
   `item_id` varchar(11) NOT NULL,
   `item_name` varchar(45) NOT NULL,
@@ -167,7 +136,6 @@ INSERT INTO `tbl_item` (`item_id`, `item_name`, `item_qty`, `item_status`) VALUE
 -- Table structure for table `tbl_patient`
 --
 
-DROP TABLE IF EXISTS `tbl_patient`;
 CREATE TABLE `tbl_patient` (
   `patient_id` varchar(11) NOT NULL,
   `patient_name` varchar(45) NOT NULL,
@@ -182,7 +150,7 @@ CREATE TABLE `tbl_patient` (
 --
 
 INSERT INTO `tbl_patient` (`patient_id`, `patient_name`, `patient_gender`, `patient_date_of_birth`, `patient_address`, `patient_status`) VALUES
-('ptnt_000001', 'Edil Gester T. Garcia    ', 'Male', '1997-12-05', 'D-11 Bldg. 25 GSIS Metrohomes Pureza St. Sta. Mesa', 1),
+('ptnt_000001', 'Edil Gester T. Garcia', 'Male', '1997-12-05', 'D-11 Bldg. 25 GSIS Metrohomes Pureza St. Sta. Mesa', 1),
 ('ptnt_000003', 'Bruno S. Mare', 'Male', '2000-04-12', 'Las Vegas', 1),
 ('ptnt_000004', 'Rose Mae S. Pusancho ', 'Female', '1998-05-21', 'Murphy Cuabo Q.C', 1),
 ('ptnt_000006', 'ShantiDope', 'Male', '2018-04-29', 'Andiyan ka nanaman', 1);
@@ -190,10 +158,30 @@ INSERT INTO `tbl_patient` (`patient_id`, `patient_name`, `patient_gender`, `pati
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_payment`
+--
+
+CREATE TABLE `tbl_payment` (
+  `invoice_id_fk` varchar(11) NOT NULL,
+  `payment_cost` float NOT NULL,
+  `payment_status` varchar(11) NOT NULL,
+  `payment_method` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_payment`
+--
+
+INSERT INTO `tbl_payment` (`invoice_id_fk`, `payment_cost`, `payment_status`, `payment_method`) VALUES
+('180618_001', 4600, 'unpaid', 'null'),
+('180618_002', 7000, 'unpaid', 'null');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_procedure`
 --
 
-DROP TABLE IF EXISTS `tbl_procedure`;
 CREATE TABLE `tbl_procedure` (
   `procedure_id` varchar(11) NOT NULL,
   `procedure_name` varchar(45) NOT NULL,
@@ -217,7 +205,6 @@ INSERT INTO `tbl_procedure` (`procedure_id`, `procedure_name`, `procedure_cost`,
 -- Table structure for table `tbl_procedure_item`
 --
 
-DROP TABLE IF EXISTS `tbl_procedure_item`;
 CREATE TABLE `tbl_procedure_item` (
   `procedure_id_fk` varchar(11) NOT NULL,
   `item_id_fk` varchar(11) NOT NULL,
@@ -242,7 +229,6 @@ INSERT INTO `tbl_procedure_item` (`procedure_id_fk`, `item_id_fk`, `quantity`) V
 -- Table structure for table `tbl_user`
 --
 
-DROP TABLE IF EXISTS `tbl_user`;
 CREATE TABLE `tbl_user` (
   `user_id` varchar(11) NOT NULL,
   `user_name` varchar(45) NOT NULL,
@@ -313,6 +299,12 @@ ALTER TABLE `tbl_patient`
   ADD PRIMARY KEY (`patient_id`);
 
 --
+-- Indexes for table `tbl_payment`
+--
+ALTER TABLE `tbl_payment`
+  ADD KEY `invoice_id_fk` (`invoice_id_fk`);
+
+--
 -- Indexes for table `tbl_procedure`
 --
 ALTER TABLE `tbl_procedure`
@@ -355,6 +347,12 @@ ALTER TABLE `tbl_invoice_doctor`
 ALTER TABLE `tbl_invoice_procedure`
   ADD CONSTRAINT `invoice_procedure_invoice_fk` FOREIGN KEY (`invoice_id_fk`) REFERENCES `tbl_invoice` (`invoice_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `invoice_procedure_procedure_fk` FOREIGN KEY (`procedure_id_fk`) REFERENCES `tbl_procedure` (`procedure_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `tbl_payment`
+--
+ALTER TABLE `tbl_payment`
+  ADD CONSTRAINT `payment_invoice` FOREIGN KEY (`invoice_id_fk`) REFERENCES `tbl_invoice` (`invoice_id`);
 
 --
 -- Constraints for table `tbl_procedure_item`

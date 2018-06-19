@@ -1,5 +1,9 @@
 <?php
   session_start();
+  if(isset($_GET['message']))
+		$message = $_GET['message'];
+	else
+		$message = "null";
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,7 +18,7 @@
     <script src="./../../js/jquery-ui.min.js"></script>
     <script src="./../../js/bootstrap.min.js"></script>
   </head>
-  <body>
+  <body onload="parse_message(<?php echo($message); ?>)">
     <header>
       <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -136,8 +140,9 @@
                   <div class="well col-xs-12 col-sm-12 col-md-12 col-lg-12">
                   <?php
                     require('./../../controller/db_connect.php');
-                    $preparedStmt = "SELECT * FROM `tbl_user` WHERE `user_status`='1' AND `user_account_type` != 'admin 2' ";
+                    $preparedStmt = "SELECT * FROM `tbl_user` WHERE `user_status`='1' AND `user_account_type` != 'admin 2' AND `user_id` != :user_id";
                     $stmt = $connection->prepare($preparedStmt);
+                    $stmt->bindParam(':user_id', $_SESSION['user_id']);
                     $stmt->execute();
                     $counter = 0;
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
@@ -295,7 +300,6 @@
                       }
                     ?>
                   </div> <!--well-->
-                  <button class="btn btn-primary btn-md pull-right" data-toggle="modal" data-target="#open_user">Add</button>
                 </div>
                 <div class="tab-pane" id="mn-deleted-user-panel" style="overflow-y:auto; height:400px;">
                   <div class="well col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -374,7 +378,6 @@
                       }
                     ?>
                   </div> <!--well-->
-                  <button class="btn btn-primary btn-md pull-right" data-toggle="modal" data-target="#open_user">Add User</button>
                 </div>
               </div>
             </div>
@@ -421,6 +424,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <input type="hidden" value="0" name="user_add" id="user_add">
+                    <input type="hidden" value="0" name="user_status" id="user_status">
                     <input type="hidden" value="./../views/admin/account.php" name="path" id="path">
                   </div>
                 </div>
@@ -468,12 +472,12 @@
                   <div class="row">
                     <div class="col-md-1 col-md-offset-1">
                       <label class="radio-inline">
-                        <input type="radio" value="Female" name="user_gender" id="user_gender" required/>Female
+                        <input type="radio" value="Female" name="user_gender" required/>Female
                       </label>
                     </div>
                     <div class="col-md-1 col-md-offset-1">
                       <label class="radio-inline">
-                        <input type="radio" value="Male" name="user_gender" id="user_gender" required/>Male
+                        <input type="radio" value="Male" name="user_gender" required/>Male
                       </label>
                     </div>
                     <div class="col-md-6 col-md-4 col-md-offset-3">
@@ -573,7 +577,31 @@
     <!--Script-->
 
     <script type="text/javascript">
-      var path = "./../views/admin/account.php";
+      var path = "./../../views/admin/account.php";
+
+      function parse_message(msg)
+  		{
+
+  			if(msg == "null")
+  				alert(msg);
+  			else if(msg == "1")
+  			{
+  				alert("Sorry! Username Already Taken! Please try again.");
+  				$('#user_name').val("<?php if(isset($_GET['user_name'])){echo($_GET['user_name']);}?>");
+  				$('#user_date_of_birth').val("<?php if(isset($_GET['user_date_of_birth'])){echo($_GET['user_date_of_birth']);}?>");
+  				$('#user_address').val("<?php if(isset($_GET['user_address'])){echo($_GET['user_address']);}?>");
+  				$('#user_username').val("<?php if(isset($_GET['user_username'])){echo($_GET['user_username']);}?>");
+  				$('#user_password').val("<?php if(isset($_GET['user_password'])){echo($_GET['user_password']);}?>");
+  				if("Female" == "<?php if(isset($_GET['user_gender'])){echo($_GET['user_gender']);}?>")
+  					$('#user_gender_female').prop("checked", true);
+  				else
+  					$('#user_gender_male').prop("checked", true);
+  				$('#user_account_type').val("<?php if(isset($_GET['user_account_type'])){echo($_GET['user_account_type']);}?>");
+  				$('#open_user').modal('show');
+  			}
+  			else if(msg == "2")
+  				alert("Account Registered! Awating for admin conirmation.");
+  		}
 
       $(document).ready(function(){
 

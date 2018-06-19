@@ -70,6 +70,7 @@
       $item_id = get_smart_id("item");
       $item_name = $_POST['item_name'];
       $item_qty = $_POST['item_qty'];
+      $path = $_POST['path'];
 
       $preparedStatement = "INSERT INTO `tbl_item`(`item_id`, `item_name`, `item_qty`, `item_status`) VALUES (:item_id, :item_name, :item_qty, 1)";
       $stmt = $connection->prepare($preparedStatement);
@@ -79,7 +80,7 @@
       $stmt->execute();
 
       $stmt = null;
-      header("Location: ../views/itemsettings.php");
+      header("Location: ".$path);
     }
 
     function add_user() {
@@ -93,8 +94,12 @@
       $user_username = $_POST['user_username'];
       $user_password = $_POST['user_password'];
       $user_account_type = $_POST['user_account_type'];
-      $user_status = 2; // Pending
-      $page_header = $_POST['page'];
+      if(isset($_POST['user_status']))
+        $user_status = 1;
+      else
+        $user_status = 2; // Pending
+      if(isset($_POST['register_user']))
+        $register_user = $_POST['register_user'];
       $page_data = "";
       $user_exist = "0"; // User Checker
 
@@ -126,7 +131,7 @@
         $stmt->execute();
         $stmt = null;
       }
-      header("Location: ../".$page_header."?message=".$user_exist.$page_data);
+      header("Location: ".$path."?message=".$user_exist.$page_data);
     }
 
     function add_patient() {
@@ -136,7 +141,7 @@
       $patient_gender = $_POST['patient_gender'];
       $patient_date_of_birth = $_POST['patient_date_of_birth'];
       $patient_address = $_POST['patient_address'];
-
+      $path = $_POST['path'];
       $preparedStmt = "INSERT INTO `tbl_patient`(`patient_id`, `patient_name`, `patient_gender`, `patient_date_of_birth`, `patient_address`) VALUES (:patient_id, :patient_name, :patient_gender, :patient_date_of_birth, :patient_address)";
 
       $stmt = $connection->prepare($preparedStmt);
@@ -148,7 +153,7 @@
       $stmt->bindParam(':patient_address', $patient_address);
       $stmt->execute();
       $stmt = null;
-      header("Location: ../views/patientsettings.php");
+      header("Location: ".$path);
     }
 
     function add_doctor() {
@@ -160,8 +165,8 @@
       $doctor_address = $_POST['doctor_address'];
       $doctor_contact_number = $_POST['doctor_contact_number'];
       $doctor_professional_fee = $_POST['doctor_professional_fee'];
-
-      $preparedStmt = "INSERT INTO `tbl_doctor`(`doctor_id`, `doctor_name`, `doctor_gender`, `doctor_date_of_birth`, `doctor_address`, `doctor_contact_number`, `doctor_professional_fee`, `doctor_professional_fee`) VALUES (:doctor_id, :doctor_name, :doctor_gender, :doctor_date_of_birth, :doctor_address, :doctor_contact_number, :doctor_professional_fee, 1)";
+      $path = $_POST['path'];
+      $preparedStmt = "INSERT INTO `tbl_doctor`(`doctor_id`, `doctor_name`, `doctor_gender`, `doctor_date_of_birth`, `doctor_address`, `doctor_contact_number`, `doctor_professional_fee`, `doctor_status`) VALUES (:doctor_id, :doctor_name, :doctor_gender, :doctor_date_of_birth, :doctor_address, :doctor_contact_number, :doctor_professional_fee, 1)";
 
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':doctor_id', $doctor_id);
@@ -173,7 +178,7 @@
       $stmt->bindParam(':doctor_professional_fee', $doctor_professional_fee);
       $stmt->execute();
       $stmt = null;
-      header("Location: ../views/doctorsettings.php");
+      header("Location: ".$path);
     }
     function add_procedure() {
 
@@ -181,6 +186,7 @@
       $procedure_id = get_smart_id("procedure");
       $procedure_name = $_POST['procedure_name'];
       $procedure_cost = $_POST['procedure_cost'];
+      $path = $_POST['path'];
       $stmt = $connection->prepare("INSERT INTO `tbl_procedure`(`procedure_id`, `procedure_name`, `procedure_cost`)
                                   VALUES (:procedure_id, :procedure_name, :procedure_cost)");
       $stmt->bindParam(':procedure_id', $procedure_id);
@@ -209,7 +215,7 @@
           $stmt->execute($insertData);
       }
       $stmt = null;
-      header("Location: ../views/treatmentsettings.php");
+      header("Location: ".$path);
     }
 
     function add_transaction() {
@@ -300,123 +306,123 @@
       header("Location: ".$path);
     }
 
-    function view_transaction_patient()
-    {
-      require('db_connect.php');
-      $patient_id = $_POST['patient_id'];
-      $output = "
-      <div>
-        <div class=row>
-          <div class='col-md-12'>
-            <h5><b>Patient:</b></h5>
-          </div>
-        </div>
-        <div class=row>
-          <div class='col-md-12'>
-            <p>".$_POST['patient_name']."</p>
-          </div>
-        </div>
-        <div class=row>
-          <div class='col-md-12'>
-            <h5><b>ID:</b></h5>
-          </div>
-        </div>
-        <div class=row>
-          <div class='col-md-12'>
-            <p>".$patient_id."</p>
-          </div>
-        </div>
-        <input type='hidden' name='invoice_add' id='invoice_add' value='0'/>
-        <input type='hidden' name='patient_id_fk' id='patient_id_fk' value='".$patient_id."'/>";
-      $output .= '
-        <div class="row">
-          <div class="col-md-12">
-            <input type="hidden" name="user_id_fk" value="'.$_POST['user_id'].'"/>
-            <input type="hidden" name="patient_id_fk" value="'.$patient_id.'"/>
-            <h5>Procedures: </h5>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <select id="procedure_select" class="form-control" name="procedures[]">
-              <option selected disabled value=0/0>Choose an Item</option>';
-
-      // Query Procedures
-      $preparedStmt = "SELECT * FROM `tbl_procedure`";
-      $stmt = $connection->prepare($preparedStmt);
-      $stmt->execute();
-      while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-      {
-        $procedure_id = $row['procedure_id'];
-        $procedure_name = $row['procedure_name'];
-        $procedure_cost = $row['procedure_cost'];
-
-        $output .= '<option value="'.$procedure_id.'/'.$procedure_cost.'">'.$procedure_name.' - '.$procedure_cost.'</option>';
-      }
-      $output .='
-            </select>
-          </div>
-        </div>
-        <div id="procedures_div"></div>
-        <div class="row">
-            <div class="col-md-1">
-              <a href="#" class="btn" id="add_procedure_field_btn"><i class="icon-plus"></i> <span>Add</span></a>
-            </div>
-            <div class="col-md-1">
-              <a href="#" class="btn" id="remove_procedure_field_btn"><i class="icon-plus"></i> <span>remove</span></a>
-            </div>
-        </div>';
-
-      // Query Doctors
-      $output .= '
-        <div class="row">
-          <div class="col-md-12">
-            <h5>Doctors: </h5>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <select id="doctor_select" class="form-control" name="doctors[]">
-              <option selected disabled value=0/0>Choose an Item</option>';
-      $preparedStmt = "SELECT * FROM `tbl_doctor`";
-      $stmt = $connection->prepare($preparedStmt);
-      $stmt->execute();
-      while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-      {
-        $doctor_id = $row['doctor_id'];
-        $doctor_name = $row['doctor_name'];
-        $doctor_professional_fee = $row['doctor_professional_fee'];
-
-        $output .= '<option value="'.$doctor_id.'/'.$doctor_professional_fee.'">'.$doctor_name.' - '.$doctor_professional_fee.'</option>';
-      }
-      $output .='
-            </select>
-          </div>
-        </div>
-        <div id="doctors_div"></div>
-        <div class="row">
-          <div class="col-md-1">
-            <a href="#" class="btn" id="add_doctor_field_btn"><i class="icon-plus"></i> <span>Add</span></a>
-          </div>
-          <div class="col-md-1">
-            <a href="#" class="btn" id="remove_doctor_field_btn"><i class="icon-plus"></i> <span>remove</span></a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-2 pull-right">
-            <div class="pull-left">
-              <p id="total_proc_cost">0</p>
-            </div>
-          </div>
-          <div class="col-md-4 pull-right">
-            <div class="pull-right">
-              <p>Total Cost: </p>
-            </div>
-          </div>
-        </div>
-      </div>';
-      echo $output;
-    }
+    // function view_transaction_patient()
+    // {
+    //   require('db_connect.php');
+    //   $patient_id = $_POST['patient_id'];
+    //   $output = "
+    //   <div>
+    //     <div class=row>
+    //       <div class='col-md-12'>
+    //         <h5><b>Patient:</b></h5>
+    //       </div>
+    //     </div>
+    //     <div class=row>
+    //       <div class='col-md-12'>
+    //         <p>".$_POST['patient_name']."</p>
+    //       </div>
+    //     </div>
+    //     <div class=row>
+    //       <div class='col-md-12'>
+    //         <h5><b>ID:</b></h5>
+    //       </div>
+    //     </div>
+    //     <div class=row>
+    //       <div class='col-md-12'>
+    //         <p>".$patient_id."</p>
+    //       </div>
+    //     </div>
+    //     <input type='hidden' name='invoice_add' id='invoice_add' value='0'/>
+    //     <input type='hidden' name='patient_id_fk' id='patient_id_fk' value='".$patient_id."'/>";
+    //   $output .= '
+    //     <div class="row">
+    //       <div class="col-md-12">
+    //         <input type="hidden" name="user_id_fk" value="'.$_POST['user_id'].'"/>
+    //         <input type="hidden" name="patient_id_fk" value="'.$patient_id.'"/>
+    //         <h5>Procedures: </h5>
+    //       </div>
+    //     </div>
+    //     <div class="row">
+    //       <div class="col-md-12">
+    //         <select id="procedure_select" class="form-control" name="procedures[]">
+    //           <option selected disabled value=0/0>Choose an Item</option>';
+    //
+    //   // Query Procedures
+    //   $preparedStmt = "SELECT * FROM `tbl_procedure`";
+    //   $stmt = $connection->prepare($preparedStmt);
+    //   $stmt->execute();
+    //   while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    //   {
+    //     $procedure_id = $row['procedure_id'];
+    //     $procedure_name = $row['procedure_name'];
+    //     $procedure_cost = $row['procedure_cost'];
+    //
+    //     $output .= '<option value="'.$procedure_id.'/'.$procedure_cost.'">'.$procedure_name.' - '.$procedure_cost.'</option>';
+    //   }
+    //   $output .='
+    //         </select>
+    //       </div>
+    //     </div>
+    //     <div id="procedures_div"></div>
+    //     <div class="row">
+    //         <div class="col-md-1">
+    //           <a href="#" class="btn" id="add_procedure_field_btn"><i class="icon-plus"></i> <span>Add</span></a>
+    //         </div>
+    //         <div class="col-md-1">
+    //           <a href="#" class="btn" id="remove_procedure_field_btn"><i class="icon-plus"></i> <span>remove</span></a>
+    //         </div>
+    //     </div>';
+    //
+    //   // Query Doctors
+    //   $output .= '
+    //     <div class="row">
+    //       <div class="col-md-12">
+    //         <h5>Doctors: </h5>
+    //       </div>
+    //     </div>
+    //     <div class="row">
+    //       <div class="col-md-12">
+    //         <select id="doctor_select" class="form-control" name="doctors[]">
+    //           <option selected disabled value=0/0>Choose an Item</option>';
+    //   $preparedStmt = "SELECT * FROM `tbl_doctor`";
+    //   $stmt = $connection->prepare($preparedStmt);
+    //   $stmt->execute();
+    //   while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    //   {
+    //     $doctor_id = $row['doctor_id'];
+    //     $doctor_name = $row['doctor_name'];
+    //     $doctor_professional_fee = $row['doctor_professional_fee'];
+    //
+    //     $output .= '<option value="'.$doctor_id.'/'.$doctor_professional_fee.'">'.$doctor_name.' - '.$doctor_professional_fee.'</option>';
+    //   }
+    //   $output .='
+    //         </select>
+    //       </div>
+    //     </div>
+    //     <div id="doctors_div"></div>
+    //     <div class="row">
+    //       <div class="col-md-1">
+    //         <a href="#" class="btn" id="add_doctor_field_btn"><i class="icon-plus"></i> <span>Add</span></a>
+    //       </div>
+    //       <div class="col-md-1">
+    //         <a href="#" class="btn" id="remove_doctor_field_btn"><i class="icon-plus"></i> <span>remove</span></a>
+    //       </div>
+    //     </div>
+    //     <div class="row">
+    //       <div class="col-md-2 pull-right">
+    //         <div class="pull-left">
+    //           <p id="total_proc_cost">0</p>
+    //         </div>
+    //       </div>
+    //       <div class="col-md-4 pull-right">
+    //         <div class="pull-right">
+    //           <p>Total Cost: </p>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>';
+    //   echo $output;
+    // }
 
     //update functions
     function update_transaction() {
@@ -639,7 +645,7 @@
       require('db_connect.php');
       $user_id = $_POST['user_id'];
       $path = $_POST['path'];
-      $preparedStmt = "UPDATE `tbl_user` SET `user_status`= 2 WHERE `user_id` = :user_id;";
+      $preparedStmt = "UPDATE `tbl_user` SET `user_status`= 3 WHERE `user_id` = :user_id;";
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':user_id', $user_id);
       $stmt->execute();
@@ -795,10 +801,21 @@
     {
       require('db_connect.php');
       $path = $_POST['path'];
-      $invoice_id = $_POST['parameter_id'];
+      $payment_paid_amount = $_POST['payment_paid_amount'];
+      $invoice_id = $_POST['invoice_id'];
+      $payment_method = $_POST['payment_method'];
+      // Update Invoice table
       $preparedStmt = "UPDATE `tbl_invoice` SET `invoice_type`='receipt' WHERE `invoice_id`=:invoice_id";
       $stmt = $connection->prepare($preparedStmt);
       $stmt->bindParam(':invoice_id', $invoice_id);
+      $stmt->execute();
+      // Update payment table
+      $preparedStmt = "UPDATE `tbl_payment` SET `payment_paid_amount`=:payment_paid_amount,
+                      `payment_status`='paid',`payment_method`=:payment_method WHERE `invoice_id_fk`=:invoice_id_fk";
+      $stmt = $connection->prepare($preparedStmt);
+      $stmt->bindParam(':payment_paid_amount', $payment_paid_amount);
+      $stmt->bindParam(':payment_method', $payment_method);
+      $stmt->bindParam(':invoice_id_fk', $invoice_id);
       $stmt->execute();
       header("Location: ../views/".$path);
     }
