@@ -1,5 +1,7 @@
 <?php
   session_start();
+  include './../../controller/functions.php';
+  check_logged_in();
   require('././../../controller/db_connect.php');
   $invoice_id = $_GET['invoice_id'];
   // Get Invoice Details
@@ -331,7 +333,7 @@
                         <?php
                           if($payment_paid_amount-$total_amount>0)
                             echo($payment_paid_amount-$total_amount);
-                          else 
+                          else
                             echo('0');
                         ?>
                       </td>

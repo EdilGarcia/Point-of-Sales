@@ -1,5 +1,9 @@
+<?php
+  include './../../controller/functions.php';
+  session_start();
+  check_logged_in();
+?>
 <!DOCTYPE html>
-
 <html>
   <head>
     <title>

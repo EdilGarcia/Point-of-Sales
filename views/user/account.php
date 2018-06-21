@@ -4,6 +4,8 @@
 		$message = $_GET['message'];
 	else
 		$message = "null";
+  include './../../controller/functions.php';
+  check_logged_in();
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,9 +1,11 @@
+<?php
+  session_start();
+  include './../../controller/functions.php';
+  check_logged_in();
+?>
 <!DOCTYPE html>
-
 <html>
-
   <head>
-
     <title>
       Makati PET/CT Center
     </title>
@@ -15,7 +17,6 @@
     <script src="./../../js/jquery-ui.min.js"></script>
     <script src="./../../js/bootstrap.min.js"></script>
   </head>
-
   <body>
      <header>
       <nav class="navbar navbar-default navbar-fixed-top">

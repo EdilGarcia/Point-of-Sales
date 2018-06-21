@@ -1,9 +1,11 @@
 <?php
+  include './../../controller/functions.php';
   session_start();
   if(isset($_GET['message']))
 		$message = $_GET['message'];
 	else
 		$message = "null";
+  check_logged_in();
 ?>
 <!DOCTYPE html>
 <html>
@@ -150,11 +152,11 @@
                   ?>
                     <div class="row user-row">
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                          <strong><?php echo $row['user_name']; ?></strong><br>
-                          <span class="text-muted">User Level: <?php echo $row['user_account_type']; ?></span>
+                        <strong><?php echo $row['user_name']; ?></strong><br>
+                        <span class="text-muted">User Level: <?php echo $row['user_account_type']; ?></span>
                       </div>
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user" data-for=".mn-user<?php echo $counter;?>">
-                          <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+                        <i class="glyphicon glyphicon-chevron-down text-muted"></i>
                       </div>
                     </div>
                     <div class="row user-info mn-user<?php echo $counter;?>">
@@ -167,10 +169,10 @@
                           <div>
                               <table class="table table-condensed table-responsive">
                                 <thead>
-                                   <tr>
-                                      <th>User Level:</th>
-                                      <th><?php echo $row['user_account_type']; ?></th>
-                                  </tr>
+                                 <tr>
+                                  <th>User Level:</th>
+                                  <th><?php echo $row['user_account_type']; ?></th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
@@ -182,20 +184,20 @@
                                     <td><?php echo $row['user_date_of_birth']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Address:</td>
-                                      <td><?php echo $row['user_address']; ?></td>
+                                    <td>Address:</td>
+                                    <td><?php echo $row['user_address']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Contact Number:</td>
-                                      <td><?php echo $row['user_contact']; ?></td>
+                                    <td>Contact Number:</td>
+                                    <td><?php echo $row['user_contact']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Username</td>
-                                      <td><?php echo $row['user_username']; ?></td>
+                                    <td>Username</td>
+                                    <td><?php echo $row['user_username']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Password</td>
-                                      <td><?php echo $row['user_password']; ?></td>
+                                    <td>Password</td>
+                                    <td><?php echo $row['user_password']; ?></td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -346,20 +348,20 @@
                                     <td><?php echo $row['user_date_of_birth']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Address:</td>
-                                      <td><?php echo $row['user_address']; ?></td>
+                                    <td>Address:</td>
+                                    <td><?php echo $row['user_address']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Contact Number:</td>
-                                      <td><?php echo $row['user_contact']; ?></td>
+                                    <td>Contact Number:</td>
+                                    <td><?php echo $row['user_contact']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Username</td>
-                                      <td><?php echo $row['user_username']; ?></td>
+                                    <td>Username</td>
+                                    <td><?php echo $row['user_username']; ?></td>
                                   </tr>
                                   <tr>
-                                      <td>Password</td>
-                                      <td><?php echo $row['user_password']; ?></td>
+                                    <td>Password</td>
+                                    <td><?php echo $row['user_password']; ?></td>
                                   </tr>
                                 </tbody>
                               </table>

@@ -305,6 +305,8 @@
 			}
 			else if(msg == "2")
 				alert("Account Registered! Awating for admin conirmation.");
+			else if(msg == "3")
+				alert("Session expired, please log in");
 		}
 	</script>
 </html>

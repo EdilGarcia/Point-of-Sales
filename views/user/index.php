@@ -1,5 +1,7 @@
 <?php
+  include './../../controller/functions.php';
   session_start();
+  check_logged_in();
 ?>
 <!DOCTYPE html>
 <html>
@@ -206,6 +208,7 @@
       var split = str.split("/");
       var patient_id = split[0];
       var patient_name = split[1];
+      var path = "./../views/user/";
       var user_id = $('#user_id_fk').val();
       $.ajax({
         url: "./../../controller/modal_views.php",
@@ -213,6 +216,7 @@
         data: {patient_id: patient_id,
               patient_name: patient_name,
               user_id: user_id,
+              path: path,
               patient_transac: 0},
         success: function(data) {
           console.log(data);

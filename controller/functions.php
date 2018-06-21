@@ -188,4 +188,10 @@
     }
     return $new_id;
   }
+
+  function check_logged_in()
+  {
+    if(isset($_SESSION['user_id']))
+      header("Location: /Points_of_sales/index.php?message=3");
+  }
 ?>

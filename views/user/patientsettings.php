@@ -1,5 +1,7 @@
 <?php
   session_start();
+  include './../../controller/functions.php';
+  check_logged_in();
 ?>
 <!DOCTYPE html>
 <html>

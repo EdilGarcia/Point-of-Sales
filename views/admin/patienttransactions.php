@@ -1,6 +1,8 @@
 <?php
   session_start();
   $_SESSION['class_type'] = $_GET['class'];
+  include './../../controller/functions.php';
+  check_logged_in();
 ?>
 <!DOCTYPE html>
 <html>

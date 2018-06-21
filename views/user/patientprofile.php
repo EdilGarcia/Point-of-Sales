@@ -174,19 +174,17 @@
               <li class="active">
                 <a href="./"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp Dashboard <span class="sr-only">(current)</span> </a>
                 <ul class="nav" id="mn-sub-menu">
-                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Search Patient</a></li>
+                  <li><a href="account.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp My Account</a></li>
+                  <li><a href="patientsearch.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Search Patient</a></li>
                   <li><a href="invoicecreation.php"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>&nbsp Search Transactions</a></li>
                 </ul>
               </li>
 
               <li>
-                  <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
-                  <ul class="nav" id="mn-sub-menu">
-                      <li><a href="patientsettings.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp Patient</a></li>
-                      <li><a href="doctorsettings.php"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp Doctor</a></li>
-                      <li><a href="itemsettings.php"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp Item</a></li>
-                      <li><a href="proceduresettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
-                  </ul>
+                <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp Maintenance</a>
+                <ul class="nav" id="mn-sub-menu">
+                  <li><a href="patientsettings.php"><span class="glyphicon glyphicon-bed" aria-hidden="true"></span>&nbsp Patient</a></li>
+                </ul>
               </li>
             </ul>
           </div>
