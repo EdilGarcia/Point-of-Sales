@@ -577,7 +577,7 @@
     <!--Script-->
 
     <script type="text/javascript">
-      var path = "./../../views/admin/account.php";
+      var path = "./../views/admin/account.php";
 
       function parse_message(msg)
   		{
@@ -606,9 +606,7 @@
       $(document).ready(function(){
 
         $(".user_update").click(function() {
-          $('#update_delete_user').modal('show')
           var user_id = $(this).attr('id');
-
           $.ajax({
             url: "./../../controller/modal_views.php",
             method: "post",
@@ -623,7 +621,6 @@
         });
 
         $(".user_delete").click(function() {
-          $('#update_delete_user').modal('show')
           var user_id = $(this).attr('id');
           $.ajax({
             url: "./../../controller/modal_views.php",
@@ -639,7 +636,6 @@
         });
 
         $(".user_activate").click(function() {
-          $('#update_delete_user').modal('show')
           var user_id = $(this).attr('id');
           $.ajax({
             url: "./../../controller/modal_views.php",

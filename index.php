@@ -20,9 +20,9 @@
 				if($_SESSION['user_account_type'] == "admin 2" || $_SESSION['user_account_type'] == "admin")
 					header("Location: views/admin/");
 				else if($_SESSION['user_account_type'] == "user")
-					header("Location: views/user/dashboard.php");
+					header("Location: views/user/");
 				else if($_SESSION['user_account_type'] == "accounting")
-					header("Location: views/accounting/dashboard.php");
+					header("Location: views/accounting/");
 			}
 			else
 				echo("<script>alert('Account not Activated');</script>");
