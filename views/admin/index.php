@@ -131,7 +131,7 @@
                             <a href="./account.php" class="btn btn-default btn-md" id="btn_account_settings">Account Settings</a>
                         </div>
                         <div class="col-sm-2 col-md-2">
-                            <a href="#" class="btn btn-default btn-md">Masterlist</a>
+                            <a href="masterlist.php" class="btn btn-default btn-md">Masterlist</a>
                         </div>
                         <div class="col-sm-2 col-md-2">
                             <a href="#" class="btn btn-default btn-md">Settings</a>

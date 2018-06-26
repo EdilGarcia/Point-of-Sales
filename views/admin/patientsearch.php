@@ -70,8 +70,8 @@
                   <div class="panel-heading" style="height: 50px;">
                     <h3 class="panel-title">Patients</h3>
                     <div class="pull-right">
-                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
-                        <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_patient"><span class="fa fa-plus"></span> Add</button>
+                      <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      <button class="btn btn-default btn-md" data-toggle="modal" data-target="#open_patient"><span class="fa fa-plus"></span> Add</button>
                     </div>
                   </div>
 
