@@ -69,63 +69,227 @@
                   <hr>
                   <ul class="nav nav-tabs">
                     <li class="active"><a href="#mn-patient-panel" data-toggle="tab">Patients</a></li>
-                    <li><a href="#mn-deleted-doctors-panel" data-toggle="tab">Doctors</a></li>
+                    <li><a href="#mn-doctor-panel" data-toggle="tab">Doctors</a></li>
+                    <li><a href="#mn-procedure-panel" data-toggle="tab">Procedures</a></li>
+                    <li><a href="#mn-item-panel" data-toggle="tab">Items</a></li>
+                    <li><a href="#mn-transaction-panel" data-toggle="tab">Transactions</a></li>
+                    <li><a href="#mn-user-panel" data-toggle="tab">User</a></li>
                   </ul>
                 </div>
-
-                <div class="panel panel-primary filterable tab-pane active" id="mn-patient-panel" style="height: 60%; overflow-y:auto;">
-                  <div class="panel-heading" style="height: 50px;">
-                    <h3 class="panel-title">Patients</h3>
-                    <div class="pull-right">
-                      <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                <div class="tab-content">
+                  <div class="panel panel-primary filterable tab-pane active" id="mn-patient-panel">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Patients</h3>
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <table class="table table-hover">
-                    <thead>
-                      <tr class="filters">
-                        <th class="col-md-3"><input type="text" class="form-control" placeholder="Name" disabled></th>
-                        <th class="col-md-2"><input type="text" class="form-control" placeholder="Gender" disabled></th>
-                        <th class="col-md-2"><input type="text" class="form-control" placeholder="Date of Birth" disabled></th>
-                        <th class="col-md-3"><input type="text" class="form-control" placeholder="Address" disabled></th>
-                        <th class="col-md-2">Actions</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <?php
-                        require('./../../controller/db_connect.php');
-                        $preparedStmt = "SELECT * FROM `tbl_patient` WHERE `patient_status`='1' ORDER BY `patient_name`";
-                        $stmt = $connection->prepare($preparedStmt);
-                        $stmt->execute();
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-                        {
-                      ?>
-                      <tr class="clickable-row">
-                          <td class="col-md-3 patient_name"><?php echo $row['patient_name']; ?></td>
-                          <td class="col-md-2"><?php echo $row['patient_gender']; ?></td>
-                          <td class="col-md-2"><?php echo $row['patient_date_of_birth']; ?></td>
-                          <td class="col-md-3"><?php echo $row['patient_address']; ?></td>
-                          <td class="col-md-2">
-                          <table>
-                            <tr>
-                              <td><input type="submit" class="btn btn-sm btn-primary invoice" value="Invoice" id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>" /></td>
-                              <td><input type="submit" class="btn btn-sm btn-primary quotation" value="Quotation" id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>" /></td>
-                              <td><input type="submit" class="btn btn-sm btn-primary receipt" value="Recipts" id="<?php echo $row['patient_id']; ?>" name="<?php echo $row['patient_name']; ?>" /></td>
-                              <td><input type="submit" class="btn btn-sm btn-primary patient_transaction" value="Transaction" id="<?php echo $row['patient_id']; ?>" name="transaction" /></td>
-                            </tr>
-                          </table>
-                          </td>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Date of Birth" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Status" disabled></th>
                         </tr>
+                      </thead>
+
+                      <tbody>
                         <?php
-                        }
+                          require('./../../controller/db_connect.php');
+                          $preparedStmt = "SELECT * FROM `tbl_patient` WHERE `patient_status`='1' ORDER BY `patient_name`";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
                         ?>
-                    </tbody>
-                  </table>
-                </div>
+                        <tr class="clickable-row">
+                            <td><?php echo $row['patient_name']; ?></td>
+                            <td><?php echo $row['patient_gender']; ?></td>
+                            <td><?php echo $row['patient_date_of_birth']; ?></td>
+                            <td><?php echo $row['patient_address']; ?></td>
+                            <td><?php if($row['patient_status']){echo "Active";} else {echo"Inactive";} ?></td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div><!--  mn-patient-panel -->
+
+                  <div class="panel panel-primary filterable tab-pane" id="mn-doctor-panel">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Doctors</h3>
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      </div>
+                    </div>
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Date of Birth" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Status" disabled></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <?php
+                          require('./../../controller/db_connect.php');
+                          $preparedStmt = "SELECT * FROM `tbl_doctor` WHERE `doctor_status`='1' ORDER BY `doctor_name`";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
+                        ?>
+                        <tr class="clickable-row">
+                            <td><?php echo $row['doctor_name']; ?></td>
+                            <td><?php echo $row['doctor_gender']; ?></td>
+                            <td><?php echo $row['doctor_date_of_birth']; ?></td>
+                            <td><?php echo $row['doctor_address']; ?></td>
+                            <td><?php if($row['doctor_status']){echo "Active";} else {echo"Inactive";} ?></td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div><!--  mn-doctor-panel -->
+
+                  <div class="panel panel-primary filterable tab-pane" id="mn-item-panel">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Doctors</h3>
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      </div>
+                    </div>
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Quantity" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Status" disabled></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <?php
+                          require('./../../controller/db_connect.php');
+                          $preparedStmt = "SELECT * FROM `tbl_item` ORDER BY `item_name`";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
+                        ?>
+                        <tr class="clickable-row">
+                            <td class="col-md-3"><?php echo $row['item_name']; ?></td>
+                            <td class="col-md-2"><?php echo $row['item_qty']; ?></td>
+                            <td class="col-md-2"><?php if($row['item_status']){echo "Active";} else {echo"Inactive";} ?></td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div><!--  mn-item-panel -->
+
+                  <div class="panel panel-primary filterable tab-pane" id="mn-procedure-panel">
+                    <div class="panel-heading" style="height: 50px;">
+                      <h3 class="panel-title">Procedures</h3>
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-md btn-filter"><span class="fa fa-filter"></span> Filter</button>
+                      </div>
+                    </div>
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="filters">
+                          <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Cost" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Items Needed" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Status" disabled></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <?php
+                          require('./../../controller/db_connect.php');
+                          $procedure_name = array();
+                          $procedure_cost = array();
+                          $proceudre_id = array();
+                          $procedure_items = array();
+                          $proceudre_status = array();
+                          $preparedStmt = "SELECT * FROM `tbl_procedure`
+                                          INNER JOIN tbl_procedure_item ON tbl_procedure_item.procedure_id_fk = tbl_procedure.procedure_id
+                                          INNER JOIN tbl_item ON tbl_item.item_id = tbl_procedure_item.item_id_fk
+                                          ORDER BY tbl_procedure.procedure_id";
+                          $stmt = $connection->prepare($preparedStmt);
+                          $stmt->execute();
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                          {
+                            if(count($proceudre_id)-1 < 0)
+                            {
+                              array_push($procedure_name, $row['procedure_name']);
+                              array_push($procedure_cost, $row['procedure_cost']);
+                              array_push($proceudre_id, $row['procedure_id']);
+                              array_push($proceudre_status, $row['procedure_status']);
+                            }
+                            else if($proceudre_id[count($proceudre_id)-1] != $row['procedure_id'])
+                            {
+                              array_push($procedure_name, $row['procedure_name']);
+                              array_push($procedure_cost, $row['procedure_cost']);
+                              array_push($proceudre_id, $row['procedure_id']);
+                              array_push($proceudre_status, $row['procedure_status']);
+                            }
+
+                            if(!isset($procedure_items[''.$row['procedure_id']]))
+                              $procedure_items[''.$row['procedure_id']] = array();
+                            array_push($procedure_items[''.$row['procedure_id']], $row['item_name']);
+                          }
+                          for($x=0; $x<count($proceudre_id); $x++)
+                          {
+                            ?>
+                            <tr class="clickable-row">
+                              <td><?php echo $procedure_name[$x]; ?></td>
+                              <td><?php echo $procedure_cost[$x]; ?></td>
+                              <td>
+                                <table class="table">
+                                  <?php
+                                    for($y=0; $y<count($procedure_items[$proceudre_id[$x]]); $y++)
+                                    {
+                                      echo "<tr><td>".$procedure_items[$proceudre_id[$x]][$y]."</td></tr>";
+                                    }
+                                  ?>
+                                </table>
+                              </td>
+                              <td><?php if($proceudre_status[$x]){echo "Active";} else {echo"Inactive";} ?></td>
+                            </tr>
+                            <?php
+                          }
+                          ?>
+                      </tbody>
+                    </table>
+                  </div><!--  mn-procedure-panel -->
+
+                  <div class="panel panel-primary filterable tab-pane" id="mn-transaction-panel">
+                    <p>transactions</p>
+                  </div><!--  mn-doctor-panel -->
+
+                  <div class="panel panel-primary filterable tab-pane" id="mn-user-panel">
+                    <p>user</p>
+                  </div><!--  mn-doctor-panel -->
+
+                </div> <!-- Tab content -->
+
               </div>
             </div>
-          </div> <!--main-->
+          </div>
         </div>
       </div>
     </main>

@@ -55,6 +55,9 @@
                 <li><a href="treatmentsettings.php"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp Procedure</a></li>
               </ul>
             </li>
+            <li>
+              <a href="masterlist.php"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp Masterlist</a>
+            </li>
             <!-- <li>
               <a style="background-color: #edf0f5; color: #000000;"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp Reports</a>
               <ul class="nav" id="mn-sub-menu">
